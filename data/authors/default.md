@@ -1,6 +1,6 @@
 ---
 name: Vijaykumar Rajendran
-shortname: VJ
+shortname: Vijay
 avatar: /static/avatar.jpg
 occupation: Sr. DevOps Engineer
 company: SITA
@@ -13,7 +13,7 @@ github: https://github.com/vijayvj6796
 
 A software engineer who aims to evolve, innovate, and inspire through technology.
 
-Currently, I am working as a **Cloud Engineer** at **Apple**.
+Currently, I am working as a **Sr. DevOps Engineer** at **SITA**.
 
 Previously, I was a Senior Software Engineer at [Guardian Life](https://www.guardianlife.com), and a Senior Engineer at [Curebase](https://www.curebase.com) where I contributed to the creation of a decentralized clinical trial platform and scaling infrastructure with an emphasis on security, HIPAA compliance, and GDPR compliance.
 
