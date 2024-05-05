@@ -1,23 +1,20 @@
-
 ---
 title: 'Remove All Files/Directories Except for One File Using Unix Commands'
 date: '2024-05-05'
 tags: ['Unix', 'Command Line', 'System Administration']
 draft: false
 summary: 'Discover how to selectively delete files in Unix-based systems while preserving a single, specified file.'
-images: ['/static/blogs/remove-files-except-one.jpeg']
+images: ['/static/blogs/blog1.webp']
 authors: ['default']
 ---
 
-A few weeks ago, I faced the challenge of cleaning up a cluttered directory in my Unix-based system without deleting a crucial configuration file. This led me to use a specific Unix command that allows for selective file deletion while preserving designated files.
+A few weeks ago, one of my friend <i>[Honnesh](https://honneshraju.cloud)</i> faced a challenge of cleaning up a cluttered directory in my Unix-based system without deleting a crucial configuration file. This led me to use a specific Unix command that allows for selective file deletion while preserving designated files.
 
 ## Why Would I Need It?
 
 In many scenarios, such as software development or server management, directories can become filled with temporary or redundant files. Cleaning these up manually is not only tedious but also prone to errors. The command discussed here provides a precise, automated approach to maintain cleanliness and order.
 
-![Example](https://dev-to-uploads.s3.amazonaws.com/i/cleanup-directory-example.png)
-
-<i>[source](https://example.com)</i>
+<i>[Honnesh](https://honneshraju.cloud)</i>
 
 ## Using Unix Commands
 
@@ -45,35 +42,10 @@ cd /path/to/project
 find . ! -name 'file.txt' -type f -exec rm -f {} +
 ```
 
-This command will delete all files except for `file.txt`, ensuring that your configuration remains untouched.
-
-```json
-...
-"file_cleanup": {
-  "preserve": "file.txt",
-  "remove": "all_other_files"
-}
-...
-```
-
-#### Using with Caution
-
-While this command is incredibly useful, it's also very powerful. Always double-check the criteria to ensure that no important files are accidentally deleted.
-
-```dockerfile
-FROM alpine:latest
-
-WORKDIR /app
-COPY . .
-RUN find . ! -name 'do-not-delete.txt' -type f -exec rm -f {} +
-```
-
 <i>Note: Testing in a non-production environment is crucial before deploying such commands widely.</i>
 
 ## Experiment with Caution!
 
 The power of Unix commands lies in their ability to perform complex tasks with simple syntax. However, with great power comes great responsibility — always ensure to have backups and test extensively.
-
-![Cleanup Process](https://dev-to-uploads.s3.amazonaws.com/i/precise-cleanup-process.png)
 
 Happy Coding 🎉
