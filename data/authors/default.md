@@ -1,14 +1,14 @@
 ---
-name: Karan Pratap Singh
-shortname: Karan
+name: Vijaykumar Rajendran
+shortname: VJ
 avatar: /static/avatar.jpg
-occupation: Cloud Engineer
-company: Apple
-resume: /static/karan_resume.pdf
+occupation: Sr. DevOps Engineer
+company: SITA
+resume: /static/Vijay_Resume.pdf
 email: contact@karanpratapsingh.com
 twitter: https://twitter.com/karan_6864
 linkedin: https://www.linkedin.com/in/karan99
-github: https://github.com/karanpratapsingh
+github: https://github.com/vijayvj6796
 ---
 
 A software engineer who aims to evolve, innovate, and inspire through technology.
