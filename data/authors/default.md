@@ -1,6 +1,6 @@
 ---
 name: Vijaykumar Rajendran
-shortname: Vijay
+shortname: VijayRajendran
 avatar: /static/avatar.jpg
 occupation: Sr. DevOps Engineer
 company: SITA
