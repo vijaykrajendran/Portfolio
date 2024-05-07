@@ -1,0 +1,60 @@
+---
+title: 'How to Backup and Restore an etcd Snapshot on a Kubernetes Control Plane Node'
+date: '2024-05-07'
+tags: ['Kubernetes', 'etcd', 'Disaster Recovery', 'System Administration']
+draft: false
+summary: 'Learn the essential steps for backing up and restoring an etcd snapshot to ensure the resilience and integrity of your Kubernetes cluster.'
+images: ['/static/blogs/blog-etcd-backup-restore.webp']
+authors: ['default']
+---
+
+import ExternalLink from '@/components/ExternalLink';
+
+## Introduction
+
+This blog post details how to backup and restore the etcd database, which is critical for maintaining the state and operation of your Kubernetes cluster.
+
+## Backing up etcd
+
+To create a backup of the etcd database, use the following command:
+
+```bash
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot save /opt/snapshot-pre-boot.
+  
+This command saves a snapshot of the etcd database to /opt/snapshot-pre-boot.db, ensuring you have a point-in-time copy of your data.
+
+## Restoring from a ETCD
+
+To restore the etcd database from the snapshot you've taken, execute:
+
+```bash
+ETCDCTL_API=3 etcdctl --data-dir /var/lib/etcd-from-backup snapshot restore /opt/snapshot-pre-boot.db
+This command restores the snapshot to a new directory /var/lib/etcd-from-backup, allowing you to recover the etcd state to the point when the snapshot was taken.
+
+Updating Kubernetes to Use the Restored Data
+Next, you need to update the etcd.yaml file located in /etc/kubernetes/manifests to use the newly restored data directory:
+
+```yaml
+
+volumes:
+  - hostPath:
+      path: /var/lib/etcd-from-backup
+      type: DirectoryOrCreate
+    name: etcd-data
+This configuration change directs the etcd container to use the restored data at /var/lib/etcd-from-backup.
+
+Monitoring and Troubleshooting
+Monitor the etcd pod's status to ensure it restarts correctly and troubleshoot if necessary:
+
+```bash
+watch "crictl ps | grep etcd"
+If issues arise, such as the pod not reaching the Ready state (1/1), you may need to manually restart it:
+
+```bash
+kubectl delete pod -n kube-system etcd-
+
+Wait about a minute after executing this command.
