@@ -17,11 +17,11 @@ export interface Contact {
 
 export const contact: Contact = {
   twitter: '@karan_6864',
-  site: 'karanpratapsingh.com',
+  site: 'vijayrajendran.com',
   calendly: 'https://calendly.com/karanpratapsingh',
   links: {
-    github: 'https://github.com/karanpratapsingh',
-    linkedin: 'https://linkedin.com/in/karan99',
+    github: 'https://github.com/vijayvj6796',
+    linkedin: 'https://www.linkedin.com/in/vijaykumar96',
     googlescholar:
       'https://scholar.google.com/citations?user=8wIfeAsAAAAJ&hl=en',
     twitter: 'https://twitter.com/karan_6864',
