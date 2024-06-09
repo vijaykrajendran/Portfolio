@@ -13,16 +13,20 @@ function Banner(props: BannerProps): React.ReactElement {
   const [aboutColor, contactColor] = useRandomColorPair();
 
   return (
-    <div className='fade-in banner flex flex-1 flex-col justify-center px-6 py-10 dark:text-white lg:px-10'>
-      <h1 className='text-3xl font-bold dark:text-white lg:text-5xl'>
-        Hi, I am {frontMatter.shortname}
+   // <div className='fade-in  flex flex-2 flex-col justify-center px-2 py-6 dark:text-white lg:px-10'>
+   // <div className='fade-in flex flex-3 flex-col justify-bottom items-center px-2 py-6 dark:text-white lg:px-10'>
+   //   <h1 className='text-3xl font-bold dark:text-white lg:text-5xl'>
+   //<div className='fade-in flex items-center justify-center h-screen'>
+      <div className='fade-in flex flex-3 flex-col justify-center items-center px-2 py-6 dark:text-white lg:px-10 '>
+        <h1 className='text-3xl font-bold dark:text-white lg:text-5xl'>
+        Hola, I am {frontMatter.shortname}
       </h1>
       <p className='my-2 text-lg lg:my-4 lg:text-2xl'>
         {frontMatter.occupation}
       </p>
       <p className='font-light lg:text-xl'>
         Read more
-        <Link className='ml-2 mr-2 font-normal text-black' href='/about'>
+        <Link className='ml-4 mr-4 font-normal text-black' href='/about'>
           <RoughNotation
             show
             type='highlight'
@@ -30,7 +34,7 @@ function Banner(props: BannerProps): React.ReactElement {
             animationDuration={2000}
             color={aboutColor}
           >
-            about me
+            about me 
           </RoughNotation>
         </Link>
         or
@@ -46,7 +50,23 @@ function Banner(props: BannerProps): React.ReactElement {
           </RoughNotation>
         </Link>
       </p>
+      
+      <p className='my-3 text-lg lg:my-2 lg:text-1xl'>
+        Checkout my latest
+        <Link className='ml-4 mr-4 font-normal text-red' href='/blog'>
+          <RoughNotation
+            show
+            type='circle' 
+            animationDelay={250}
+            animationDuration={2000}
+            color={contactColor}
+          >
+            blogs
+          </RoughNotation>
+        </Link>
+      </p>
     </div>
+  //</div>
   );
 }
 
