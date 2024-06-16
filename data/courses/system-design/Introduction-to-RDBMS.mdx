@@ -1,0 +1,29 @@
+---
+title: 'Introduction to RDBMS'
+date: '2024-06-16'
+draft: false
+summary: 'In this tutorial,  we will introduce to RDBMS'
+#images: ['/static/courses/system-design/chapter-I/osi-model/banner.png']
+authors: ['default']
+---
+
+## Key Concepts: Tables, Rows, Columns
+
+**Tables:** In a relational database, a table is a collection of related data entries consisting of columns and rows. Each table has a unique name.
+    - **Example:** A table called Employees with columns EmployeeID, FirstName, LastName, and Department.
+
+**Rows:** Also known as records or tuples, rows represent a single, implicitly structured data item in a table.
+    - **Example:** A row in the Employees table might be 1, John, Doe, HR.
+
+**Columns:** Also known as attributes or fields, columns represent the structure of the table, where each column contains all the information of a single type (or attribute).
+    - **Example:** The FirstName column in the Employees table contains all employees' first names.
+
+## Primary Keys and Foreign Keys
+
+**Primary Key:** A primary key is a column, or a set of columns, that uniquely identifies each row in a table. The primary key must contain unique values and cannot contain null values.
+
+    - **Example:** EmployeeID in the Employees table could be a primary key.
+
+**Foreign Key:** A foreign key is a column, or a set of columns, that creates a link between two tables. It refers to the primary key of another table, ensuring referential integrity of the data.
+
+    - **Example:** If there is a Departments table with DepartmentID as the primary key, the Employees table can have a DepartmentID column as a foreign key referencing Departments(DepartmentID).

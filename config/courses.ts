@@ -20,75 +20,35 @@ export const courseSlugMap = {
 
 export const courses: Course[] = [
   {
-    title: 'System Design',
+    title: 'Learn Mysql',
     slug: 'system-design',
     banner: '/static/courses/system-design/banner.png',
     description:
-      'Learn how to design systems at scale and prepare for system design interviews',
+      'Learn how to work realtime on Mysql database in production Environment',
     content: [
       {
         name: 'Getting Started',
         content: [
           {
-            name: 'Welcome to the course',
-            slug: 'welcome-to-the-course',
+            name: 'Welcome to the MYSQL course',
+            slug: 'welcome-to-the-courses1',
           },
           {
-            name: 'What is system design?',
+            name: 'What is RDBMS & Why MYSQL?',
             slug: 'what-is-system-design',
           },
         ],
       },
       {
-        name: 'Chapter I',
+        name: 'Chapter I:  Introduction to Databases',
         content: [
           {
-            name: 'IP',
-            slug: 'ip',
+            name: 'What is Database?',
+            slug: 'Introduction',
           },
           {
-            name: 'OSI Model',
-            slug: 'osi-model',
-          },
-          {
-            name: 'TCP and UDP',
-            slug: 'tcp-and-udp',
-          },
-          {
-            name: 'Domain Name System (DNS)',
-            slug: 'domain-name-system',
-          },
-          {
-            name: 'Load Balancing',
-            slug: 'load-balancing',
-          },
-          {
-            name: 'Clustering',
-            slug: 'clustering',
-          },
-          {
-            name: 'Caching',
-            slug: 'caching',
-          },
-          {
-            name: 'Content Delivery Network (CDN)',
-            slug: 'content-delivery-network',
-          },
-          {
-            name: 'Proxy',
-            slug: 'proxy',
-          },
-          {
-            name: 'Availability',
-            slug: 'availability',
-          },
-          {
-            name: 'Scalability',
-            slug: 'scalability',
-          },
-          {
-            name: 'Storage',
-            slug: 'storage',
+            name: 'Introduction to RDBMS',
+            slug: 'Introduction-to-RDBMS',
           },
         ],
       },
