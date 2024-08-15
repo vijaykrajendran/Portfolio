@@ -1,0 +1,71 @@
+---
+title: "Automating Flask Application Deployment with a Shell Script and systemd"
+description: "Learn how to automate the deployment and management of your Flask application using a shell script and systemd."
+date: "2023-08-14"
+tags: ["Flask", "DevOps", "Automation", "systemd", "Python"]
+---
+
+In this post, we’ll walk through how to automate the deployment and management of a Flask application using a shell script and `systemd`. This approach ensures that your application runs as a service, automatically restarts if it crashes, and starts on boot.
+
+## Steps to Automate Your Flask Application Deployment and Running
+
+### 1. Create a Deployment Script (`deploy_flask.sh`)
+
+This script handles several tasks:
+
+- Updates server packages.
+- Installs necessary dependencies (like Python and pip).
+- Sets up a virtual environment.
+- Installs Python packages.
+- Configures the `systemd` service to manage the Flask application.
+
+Create a file named `deploy_flask.sh` and include the following content:
+
+```bash
+#!/bin/bash
+
+# Update and install system packages
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3 python3-pip python3-venv nginx -y
+
+# Go to the application directory
+cd /home/ubuntu/student-python-webapp
+
+# Set up the Python virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install the required Python packages
+pip install -r requirements.txt
+
+# Deactivate the virtual environment
+deactivate
+
+# Set up the systemd service for the Flask application
+sudo bash -c 'cat > /etc/systemd/system/flaskapp.service << EOF
+[Unit]
+Description=Flask Application
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/student-python-webapp
+ExecStart=/home/ubuntu/student-python-webapp/venv/bin/python /home/ubuntu/student-python-webapp/app.py
+Restart=always
+StandardOutput=append:/home/ubuntu/student-python-webapp/logs/flaskapp.log
+StandardError=append:/home/ubuntu/student-python-webapp/logs/flaskapp_error.log
+
+[Install]
+WantedBy=multi-user.target
+EOF'
+
+# Reload systemd and start the service
+sudo systemctl daemon-reload
+sudo systemctl enable flaskapp
+sudo systemctl start flaskapp
+
+# Restart Nginx to apply any configuration changes
+sudo systemctl restart nginx
+
+echo "Deployment complete. Flask application is running as a service."
+
