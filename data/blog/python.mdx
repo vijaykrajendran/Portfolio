@@ -1,0 +1,124 @@
+import { CodeBlock } from 'your-code-component-library';
+
+# Automating Flask Application Deployment with a Shell Script and `systemd`
+
+In this post, we’ll walk through how to automate the deployment and management of a Flask application using a shell script and `systemd`. This approach ensures that your application runs as a service, automatically restarts if it crashes, and starts on boot.
+
+## Steps to Automate Your Flask Application Deployment and Running
+
+### 1. Create a Deployment Script (`deploy_flask.sh`)
+
+This script handles several tasks:
+
+- Updates server packages.
+- Installs necessary dependencies (like Python and pip).
+- Sets up a virtual environment.
+- Installs Python packages.
+- Configures the `systemd` service to manage the Flask application.
+
+Create a file named `deploy_flask.sh` and include the following content:
+
+<CodeBlock language="bash">
+{`#!/bin/bash
+
+# Update and install system packages
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3 python3-pip python3-venv nginx -y
+
+# Go to the application directory
+cd /home/ubuntu/student-python-webapp
+
+# Set up the Python virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install the required Python packages
+pip install -r requirements.txt
+
+# Deactivate the virtual environment
+deactivate
+
+# Set up the systemd service for the Flask application
+sudo bash -c 'cat > /etc/systemd/system/flaskapp.service << EOF
+[Unit]
+Description=Flask Application
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/student-python-webapp
+ExecStart=/home/ubuntu/student-python-webapp/venv/bin/python /home/ubuntu/student-python-webapp/app.py
+Restart=always
+StandardOutput=append:/home/ubuntu/student-python-webapp/logs/flaskapp.log
+StandardError=append:/home/ubuntu/student-python-webapp/logs/flaskapp_error.log
+
+[Install]
+WantedBy=multi-user.target
+EOF'
+
+# Reload systemd and start the service
+sudo systemctl daemon-reload
+sudo systemctl enable flaskapp
+sudo systemctl start flaskapp
+
+# Restart Nginx to apply any configuration changes
+sudo systemctl restart nginx
+
+echo "Deployment complete. Flask application is running as a service."
+`}
+</CodeBlock>
+
+### Explanation:
+
+- **System Update and Installation**: The script updates the system and installs necessary packages (like Python, pip, and Nginx).
+- **Virtual Environment Setup**: The script sets up a Python virtual environment and installs required Python packages.
+- **Systemd Service Setup**: The script automatically creates and configures a `systemd` service file to manage the Flask application.
+- **Logging**: The `StandardOutput` and `StandardError` directives in the service file are configured to log application output to specific log files.
+- **Service Management**: The service is reloaded, enabled to start on boot, and started immediately.
+
+### 2. Make the Script Executable
+
+Before running the script, make it executable:
+
+<CodeBlock language="bash">
+{`chmod +x deploy_flask.sh`}
+</CodeBlock>
+
+### 3. Run the Script
+
+To deploy and start the Flask application, simply run the script:
+
+<CodeBlock language="bash">
+{`./deploy_flask.sh`}
+</CodeBlock>
+
+### 4. Automate with Cron (Optional)
+
+If you want the script to run automatically, such as at boot, you can schedule it with cron.
+
+1. Edit the crontab for the root user:
+
+<CodeBlock language="bash">
+{`sudo crontab -e`}
+</CodeBlock>
+
+2. Add the following line to run the script at boot:
+
+<CodeBlock language="bash">
+{`@reboot /home/ubuntu/deploy_flask.sh`}
+</CodeBlock>
+
+### 5. Use Ansible for More Complex Automation (Optional)
+
+For more complex deployments, especially across multiple servers, consider using tools like **Ansible** or **Terraform**. These tools allow you to define your infrastructure as code and automate the deployment process across multiple environments.
+
+## Summary
+
+This approach provides a streamlined way to deploy and manage your Flask application, ensuring it runs as a service with minimal manual intervention. The script handles setting up the environment, installing dependencies, configuring the service, and managing the application lifecycle.
+
+By using a simple shell script combined with `systemd`, you can fully automate your Flask application’s deployment and maintenance tasks.
+
+---
+
+<small>This post was inspired by common challenges when deploying Python web applications and aims to simplify the process for DevOps engineers and developers alike.</small>
+
