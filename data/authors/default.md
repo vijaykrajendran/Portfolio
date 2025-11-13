@@ -6,7 +6,7 @@ occupation: Sr. DevOps Engineer
 company: SITA
 resume: /static/Vijay_Resume.pdf
 email: vijayvj6796@gmail.com
-twitter: https://twitter.com/karan_6864
+twitter: https://twitter.com/vijayrajendran_
 linkedin: https://www.linkedin.com/in/vijaykumar96
 github: https://github.com/vijayvj6796
 ---

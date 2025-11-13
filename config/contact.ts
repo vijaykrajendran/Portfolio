@@ -16,7 +16,7 @@ export interface Contact {
 }
 
 export const contact: Contact = {
-  twitter: '@karan_6864',
+  twitter: '@vijayrajendran_',
   site: 'vijayrajendran.com',
   calendly: 'https://calendly.com/vijaykrajendran69',
   links: {
@@ -24,9 +24,9 @@ export const contact: Contact = {
     linkedin: 'https://www.linkedin.com/in/vijaykumar96',
     googlescholar:
       'https://scholar.google.com/citations?user=8wIfeAsAAAAJ&hl=en',
-    twitter: 'https://twitter.com/karan_6864',
-    youtube: 'https://www.youtube.com/c/KaranPratapSingh',
-    email: 'mailto:contact@karanpratapsingh.com',
-    buymeacoffee: 'https://www.buymeacoffee.com/karanps',
+    twitter: 'https://twitter.com/vijayrajendran_',
+    youtube: 'https://www.youtube.com/c/techtravellertales',
+    email: 'mailto:vijaykrajendran@gmail.com',
+    buymeacoffee: 'https://www.buymeacoffee.com/vijayrajendran_'
   },
 };
