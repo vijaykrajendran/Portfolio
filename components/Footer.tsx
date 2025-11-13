@@ -1,5 +1,5 @@
 import SocialIcons from '@/components/SocialIcons';
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 function Footer(): React.ReactElement {
   const year: number = new Date().getFullYear();
