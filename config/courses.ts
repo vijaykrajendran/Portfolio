@@ -22,7 +22,7 @@ export const courses: Course[] = [
   {
     title: 'Learn Mysql',
     slug: 'learn-mysql',
-    banner: '/static/courses/system-design/banner.png',
+    banner: '/static/courses/learn-mysql/banner.png',
     description:
       'Learn how to work realtime on Mysql database in production Environment',
     content: [
