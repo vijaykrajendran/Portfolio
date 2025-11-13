@@ -21,7 +21,7 @@ export const courseSlugMap = {
 export const courses: Course[] = [
   {
     title: 'Learn Mysql',
-    slug: 'system-design',
+    slug: 'learn-mysql',
     banner: '/static/courses/system-design/banner.png',
     description:
       'Learn how to work realtime on Mysql database in production Environment',
