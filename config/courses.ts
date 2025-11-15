@@ -16,6 +16,9 @@ export interface Course {
 export const courseSlugMap = {
   go: 'Learn Go',
   'system-design': 'System Design',
+  'learn-mysql': 'Learn Mysql',
+  'learn-nginx': 'Learn Nginx',
+  python: 'Learn Python',
 };
 
 export const courses: Course[] = [
