@@ -1,0 +1,50 @@
+---
+title: 'Introduction to NGINX'
+date: '2025-11-13'
+draft: false
+summary: 'Learn the fundamentals of NGINX — a high-performance web server, reverse proxy, and load balancer widely used in DevOps environments.'
+images: ['/static/courses/devops/nginx/introduction/banner.png']
+authors: ['default']
+---
+
+NGINX is a high-performance web server and reverse proxy widely adopted in modern DevOps and production ecosystems. It is known for its event-driven, non-blocking architecture that allows it to handle thousands of concurrent connections with minimal resource usage.
+
+![nginx-overview](/static/courses/devops/nginx/introduction/nginx-overview.png)
+
+## Why Do DevOps Engineers Use NGINX?
+
+DevOps teams rely on NGINX because it can serve as:
+
+- A high-performance **web server**  
+- A **reverse proxy** for backend services  
+- A **load balancer** that distributes traffic  
+- An **SSL/TLS terminator**  
+- A **static file server**  
+- A **security layer** protecting APIs  
+- A critical component in **Docker & Kubernetes** deployments  
+
+NGINX sits at the edge of most infrastructures, acting as a central traffic manager.
+
+---
+
+## Real-World Usage
+
+Some well-known companies that use NGINX in production include:
+
+- Netflix  
+- Airbnb  
+- GitHub  
+- Dropbox  
+- Kubernetes (NGINX powers many Ingress controllers)
+
+NGINX is popular for its stability, speed, and lightweight footprint.
+
+---
+
+## Visual Overview
+
+Client → **NGINX** → Upstream / Backend Servers
+
+NGINX receives client requests, processes them efficiently, and forwards them to the appropriate backend service.
+
+---

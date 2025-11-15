@@ -1,0 +1,219 @@
+---
+title: Understanding Reverse Proxy
+description: Learn how Nginx acts as a reverse proxy and why it's powerful
+---
+
+# Understanding Reverse Proxy
+
+This is one of the most important concepts in DevOps. Let me break it down for you.
+
+## What's a Reverse Proxy?
+
+Think of it like this:
+
+```
+Traditional Setup (No Proxy):
+Client → Backend Server 1 (port 3000)
+Client → Backend Server 2 (port 3000)
+Client → Backend Server 3 (port 3000)
+
+Clients see all your servers directly!
+```
+
+```
+With Reverse Proxy (Nginx):
+Client → Nginx (port 80/443) ← Single entry point
+             ↓
+         Backend Server 1 (internal port 3000)
+         Backend Server 2 (internal port 3000)
+         Backend Server 3 (internal port 3000)
+
+Clients only see Nginx!
+```
+
+## Why Use a Reverse Proxy?
+
+### 1. **Security** 🔒
+- Clients never see your actual backend servers
+- Nginx can block suspicious requests
+- DDoS attacks hit Nginx first, protecting backends
+
+### 2. **Load Balancing** ⚖️
+- Distribute traffic across multiple servers
+- Prevent any single server from being overwhelmed
+
+### 3. **SSL/TLS Termination** 🔐
+- Handle HTTPS in one place
+- Reduce CPU load on backends (they talk plain HTTP internally)
+
+### 4. **Caching** 💾
+- Cache responses from backends
+- Serve from cache without hitting backends
+
+### 5. **Routing** 🚦
+- Route different URLs to different backends
+- `/api/*` → API server
+- `/images/*` → Image server
+- `/admin/*` → Admin panel
+
+### 6. **High Availability** 🚀
+- If one backend dies, route to another
+- Automatic failover
+
+## Simple Reverse Proxy Example
+
+Let's say you have a Node.js app running on `http://localhost:3000`.
+
+You want users to access it at `http://example.com`.
+
+**Create this Nginx config:**
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+    }
+}
+```
+
+**That's it!** Now:
+- User visits `http://example.com`
+- Nginx receives the request
+- Nginx forwards it to `http://localhost:3000`
+- Backend processes it
+- Response goes back to user
+
+## Real-World Architecture
+
+```
+                    Internet
+                       ↑
+                       │
+                   Nginx Proxy
+                  (port 80/443)
+                   Public IP
+                       ↓
+        ┌──────────────┼──────────────┐
+        ↓              ↓              ↓
+    Backend 1     Backend 2     Backend 3
+  (localhost:     (localhost:   (localhost:
+     3000)          3001)         3002)
+   Node.js        Node.js       Node.js
+    Private      Private       Private
+    Network
+```
+
+Clients don't see Backends 1, 2, 3. They only see the Nginx proxy!
+
+## Key Nginx Directives for Reverse Proxy
+
+```nginx
+location /api {
+    # Forward request to backend
+    proxy_pass http://backend_server;
+
+    # Keep original headers
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    # Timeouts
+    proxy_connect_timeout 60s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+}
+```
+
+**What each line does:**
+- `proxy_pass` → Where to forward the request
+- `X-Real-IP` → Send client's real IP to backend
+- `X-Forwarded-For` → All IPs in the chain
+- `X-Forwarded-Proto` → Was it HTTP or HTTPS?
+
+## Common Scenarios
+
+### Scenario 1: Single Backend
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://192.168.1.100:3000;
+    }
+}
+```
+
+### Scenario 2: Multiple Backends (Load Balancing)
+```nginx
+upstream backend_pool {
+    server 192.168.1.100:3000;
+    server 192.168.1.101:3000;
+    server 192.168.1.102:3000;
+}
+
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://backend_pool;
+    }
+}
+```
+
+### Scenario 3: Route Different URLs to Different Backends
+```nginx
+upstream api_servers {
+    server localhost:3000;
+}
+
+upstream web_servers {
+    server localhost:5000;
+}
+
+server {
+    listen 80;
+    server_name example.com;
+
+    location /api {
+        proxy_pass http://api_servers;
+    }
+
+    location / {
+        proxy_pass http://web_servers;
+    }
+}
+```
+
+## Testing Your Reverse Proxy
+
+```bash
+# Make sure your backend is running
+curl http://localhost:3000
+
+# Test through Nginx
+curl http://localhost
+
+# Check Nginx logs for any errors
+tail -f /var/log/nginx/error.log
+
+# Make a request and check access log
+curl http://localhost/test
+tail -f /var/log/nginx/access.log
+```
+
+## Summary
+
+A reverse proxy:
+- ✅ Hides your backend servers
+- ✅ Distributes traffic
+- ✅ Handles SSL/TLS termination
+- ✅ Caches responses
+- ✅ Routes traffic intelligently
+
+You've now understood one of the most powerful Nginx features! Next, we'll explore load balancing algorithms. 💪
