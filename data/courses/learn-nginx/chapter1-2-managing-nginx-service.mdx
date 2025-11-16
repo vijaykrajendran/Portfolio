@@ -1,0 +1,83 @@
+---
+title: Starting, Stopping, and Managing Nginx Service
+description: Essential commands for managing Nginx service
+---
+
+# Managing Nginx Service
+
+## Service Commands
+
+### Start Nginx
+\`\`\`bash
+sudo systemctl start nginx
+\`\`\`
+
+### Stop Nginx
+\`\`\`bash
+sudo systemctl stop nginx
+\`\`\`
+
+### Restart Nginx (full restart)
+\`\`\`bash
+sudo systemctl restart nginx
+\`\`\`
+
+### Reload Config (graceful, no downtime)
+\`\`\`bash
+sudo systemctl reload nginx
+\`\`\`
+
+### Check Status
+\`\`\`bash
+sudo systemctl status nginx
+\`\`\`
+
+### Enable on Boot
+\`\`\`bash
+sudo systemctl enable nginx
+\`\`\`
+
+### Disable on Boot
+\`\`\`bash
+sudo systemctl disable nginx
+\`\`\`
+
+## Nginx Binary Commands
+
+### Test Configuration
+\`\`\`bash
+sudo nginx -t
+\`\`\`
+
+### Show Configuration
+\`\`\`bash
+sudo nginx -T
+\`\`\`
+
+### Check Version
+\`\`\`bash
+nginx -v
+nginx -V  # With modules
+\`\`\`
+
+## Process Management
+
+### View Processes
+\`\`\`bash
+ps aux | grep nginx
+\`\`\`
+
+### Send Signals to Master Process
+\`\`\`bash
+sudo kill -HUP $(cat /var/run/nginx.pid)   # Reload
+sudo kill -QUIT $(cat /var/run/nginx.pid)  # Graceful shutdown
+sudo kill -TERM $(cat /var/run/nginx.pid)  # Fast shutdown
+\`\`\`
+
+## Best Practices
+✅ Always test config before reload: `sudo nginx -t`
+✅ Use reload instead of restart (no downtime)
+✅ Enable Nginx to start on boot
+✅ Monitor logs after changes
+
+Perfect! You can now manage Nginx like a pro!

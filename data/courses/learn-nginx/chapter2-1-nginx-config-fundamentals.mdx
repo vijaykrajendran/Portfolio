@@ -1,0 +1,52 @@
+---
+title: Nginx Configuration Fundamentals
+description: Master Nginx configuration syntax
+---
+
+# Nginx Configuration Fundamentals
+
+## Configuration Syntax
+
+\`\`\`nginx
+directive value;
+
+block_name {
+    nested_directive value;
+}
+\`\`\`
+
+**Rules:**
+- Every directive ends with `;`
+- Blocks use `{}`
+- Comments use `#`
+
+## Example Configuration
+
+\`\`\`nginx
+user nginx;
+worker_processes auto;
+
+http {
+    include mime.types;
+
+    server {
+        listen 80;
+        server_name example.com;
+        root /var/www;
+
+        location / {
+            try_files $uri =404;
+        }
+    }
+}
+\`\`\`
+
+## Variables
+\`\`\`
+$host           Domain name
+$uri            Request path
+$remote_addr    Client IP
+$status         HTTP status
+\`\`\`
+
+Configuration mastered!
