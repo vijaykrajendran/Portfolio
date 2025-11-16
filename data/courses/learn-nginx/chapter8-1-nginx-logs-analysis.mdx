@@ -1,0 +1,41 @@
+---
+title: 'Nginx Logs and Log Analysis'
+date: '2025-11-16'
+draft: false
+summary: 'Monitor and analyze Nginx logs'
+images: ['/static/courses/learn-nginx/chapter8/banner.png']
+authors: ['default']
+---
+
+# Nginx Logs and Log Analysis
+
+## View Logs
+
+```bash
+# Follow access log
+tail -f /var/log/nginx/access.log
+
+# Follow error log
+tail -f /var/log/nginx/error.log
+
+# Last 100 lines
+tail -100 /var/log/nginx/access.log
+```
+
+## Analyze Logs
+
+```bash
+# Top IPs
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -10
+
+# Top URLs
+awk '{print $7}' access.log | sort | uniq -c | sort -rn | head -10
+
+# HTTP status codes
+awk '{print $9}' access.log | sort | uniq -c
+
+# Slow requests (> 1 second)
+awk '$NF > 1' access.log
+```
+
+Insights from logs!

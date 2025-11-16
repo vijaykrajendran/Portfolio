@@ -1,0 +1,58 @@
+---
+title: 'Setting Up Self-Signed Certificates'
+date: '2025-11-16'
+draft: false
+summary: 'Create certificates for testing environments'
+images: ['/static/courses/learn-nginx/chapter4/banner.png']
+authors: ['default']
+---
+
+# Self-Signed Certificates
+
+## Generate Certificate
+
+```bash
+sudo openssl req -x509 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -keyout /etc/nginx/ssl/selfsigned.key \
+  -out /etc/nginx/ssl/selfsigned.crt
+```
+
+Answer the prompts:
+- Country
+- State
+- City
+- Organization
+- Common Name (your domain)
+
+## Use in Nginx
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name example.com;
+
+    ssl_certificate /etc/nginx/ssl/selfsigned.crt;
+    ssl_certificate_key /etc/nginx/ssl/selfsigned.key;
+}
+```
+
+## HTTP to HTTPS Redirect
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+    return 301 https://$host$request_uri;
+}
+```
+
+## Important Note
+
+Self-signed certificates:
+- ✅ Free
+- ✅ Good for testing
+- ❌ Browsers show warnings
+- ❌ Not for production
+
+Good for testing!

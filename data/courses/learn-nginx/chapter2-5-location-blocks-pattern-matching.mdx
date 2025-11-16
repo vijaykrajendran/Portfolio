@@ -1,0 +1,60 @@
+---
+title: 'Location Blocks and Pattern Matching'
+date: '2025-11-16'
+draft: false
+summary: 'Advanced URL routing with location blocks'
+images: ['/static/courses/learn-nginx/chapter2/banner.png']
+authors: ['default']
+---
+
+# Location Blocks and Pattern Matching
+
+## Basic Location
+
+```nginx
+location / {
+    root /var/www;
+}
+```
+
+## Location Modifiers
+
+| Modifier | Match Type | Priority |
+|----------|------------|----------|
+| `=` | Exact match | 1 (Highest) |
+| `^~` | Prefix | 2 |
+| `~` | Regex (case-sensitive) | 3 |
+| `~*` | Regex (case-insensitive) | 4 |
+| (none) | Prefix (default) | 5 (Lowest) |
+
+## Practical Examples
+
+```nginx
+# Exact match - only /api
+location = /api {
+    return 200 "API endpoint";
+}
+
+# Regex - PHP files
+location ~ \.php$ {
+    fastcgi_pass php:9000;
+}
+
+# Images - case insensitive
+location ~* \.(jpg|png|gif|svg)$ {
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+}
+
+# Prefix - /static paths
+location /static {
+    expires 1y;
+}
+
+# Catch-all
+location / {
+    try_files $uri =404;
+}
+```
+
+Master URL routing!

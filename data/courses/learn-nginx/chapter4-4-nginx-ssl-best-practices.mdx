@@ -1,0 +1,50 @@
+---
+title: 'Nginx SSL Configuration Best Practices'
+date: '2025-11-16'
+draft: false
+summary: 'Production-ready SSL configuration'
+images: ['/static/courses/learn-nginx/chapter4/banner.png']
+authors: ['default']
+---
+
+# Nginx SSL Best Practices
+
+## Production-Ready Config
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name example.com;
+
+    # Certificates
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+    # TLS versions
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    # Performance
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+}
+```
+
+## Security Settings
+
+| Setting | Value | Purpose |
+|---------|-------|---------|
+| `ssl_protocols` | TLSv1.2 TLSv1.3 | Only modern versions |
+| `ssl_ciphers` | HIGH:!aNULL:!MD5 | Strong encryption |
+| `ssl_prefer_server_ciphers` | on | Server chooses cipher |
+
+## Security Headers
+
+```nginx
+add_header Strict-Transport-Security "max-age=31536000" always;
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header X-Content-Type-Options "nosniff" always;
+```
+
+Production secure!

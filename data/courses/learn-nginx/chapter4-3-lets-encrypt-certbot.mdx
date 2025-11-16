@@ -1,0 +1,66 @@
+---
+title: "Let's Encrypt with Certbot"
+date: '2025-11-16'
+draft: false
+summary: 'Get free SSL certificates automatically'
+images: ['/static/courses/learn-nginx/chapter4/banner.png']
+authors: ['default']
+---
+
+# Let's Encrypt with Certbot
+
+## Install Certbot
+
+```bash
+sudo apt update
+sudo apt install certbot python3-certbot-nginx -y
+```
+
+## Get Certificate
+
+```bash
+sudo certbot --nginx -d example.com -d www.example.com
+```
+
+Certbot will:
+1. Validate domain ownership
+2. Generate certificate
+3. Update Nginx config
+4. Set up auto-renewal
+
+## Verify Installation
+
+```bash
+sudo certbot certificates
+```
+
+## Auto-Renewal
+
+Certificates from Let's Encrypt expire in 90 days.
+
+Certbot automatically renews via systemd timer:
+
+```bash
+sudo systemctl enable certbot.timer
+sudo systemctl start certbot.timer
+```
+
+## Test Renewal
+
+```bash
+sudo certbot renew --dry-run
+```
+
+## Nginx Config
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name example.com www.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+}
+```
+
+Free HTTPS forever!

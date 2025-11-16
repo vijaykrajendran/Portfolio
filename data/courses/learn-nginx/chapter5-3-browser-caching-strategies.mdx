@@ -1,0 +1,50 @@
+---
+title: 'Browser Caching Strategies'
+date: '2025-11-16'
+draft: false
+summary: 'Optimize caching for static assets'
+images: ['/static/courses/learn-nginx/chapter5/banner.png']
+authors: ['default']
+---
+
+# Browser Caching Strategies
+
+## Cache Static Assets
+
+```nginx
+location ~* \.(jpg|css|js|png|gif|ico|svg|woff|woff2)$ {
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+}
+```
+
+## Long-Term Caching
+
+For files with version hash:
+
+```nginx
+location ~* \.(js|css)$ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+}
+```
+
+## No Cache for HTML
+
+```nginx
+location / {
+    add_header Cache-Control "no-cache, must-revalidate, public";
+    try_files $uri /index.html;
+}
+```
+
+## Cache Headers
+
+| Header | Purpose |
+|--------|---------|
+| `Cache-Control` | How to cache |
+| `Expires` | When to expire |
+| `ETag` | Unique identifier |
+| `Last-Modified` | Last change time |
+
+Faster page loads!

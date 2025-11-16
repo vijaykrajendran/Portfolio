@@ -1,0 +1,32 @@
+---
+title: 'Nginx Configuration Files'
+date: '2025-11-16'
+draft: false
+summary: 'Structure of Nginx configuration'
+images: ['/static/courses/learn-nginx/chapter1/banner.png']
+authors: ['default']
+---
+
+# Nginx Configuration Files
+
+The main config file is `/etc/nginx/nginx.conf`
+
+## Basic Structure
+
+```nginx
+user nginx;
+worker_processes auto;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 80;
+        server_name example.com;
+    }
+}
+```
+
+Done!

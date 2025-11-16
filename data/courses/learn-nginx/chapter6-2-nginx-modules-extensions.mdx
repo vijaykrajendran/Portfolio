@@ -1,0 +1,45 @@
+---
+title: 'Nginx Modules and Extensions'
+date: '2025-11-16'
+draft: false
+summary: 'Extend Nginx with additional modules'
+images: ['/static/courses/learn-nginx/chapter6/banner.png']
+authors: ['default']
+---
+
+# Nginx Modules and Extensions
+
+## List Installed Modules
+
+```bash
+nginx -V
+```
+
+Shows all compiled modules.
+
+## Common Modules
+
+| Module | Purpose |
+|--------|---------|
+| http_ssl_module | HTTPS support |
+| http_v2_module | HTTP/2 support |
+| http_gzip_static_module | Pre-compressed files |
+| http_realip_module | Real IP detection |
+| http_auth_basic_module | Basic authentication |
+
+## Install Modules
+
+```bash
+sudo apt search nginx-module
+sudo apt install nginx-module-geoip2
+```
+
+## Enable Module
+
+Add to nginx.conf:
+
+```nginx
+load_module modules/ngx_http_geoip2_module.so;
+```
+
+Extensible!

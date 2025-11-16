@@ -1,0 +1,60 @@
+---
+title: 'Nginx Configuration Fundamentals'
+date: '2025-11-16'
+draft: false
+summary: 'Master Nginx configuration syntax and structure'
+images: ['/static/courses/learn-nginx/chapter2/banner.png']
+authors: ['default']
+---
+
+# Nginx Configuration Fundamentals
+
+## Configuration Syntax
+
+Nginx configuration uses simple directive and block syntax:
+
+```nginx
+directive value;
+
+block_name {
+    nested_directive value;
+}
+```
+
+**Key Rules:**
+- Every directive ends with semicolon (;)
+- Blocks use curly braces
+- Comments use hash symbol (#)
+
+## Example Configuration
+
+```nginx
+user nginx;
+worker_processes auto;
+
+http {
+    include mime.types;
+
+    server {
+        listen 80;
+        server_name example.com;
+        root /var/www;
+
+        location / {
+            try_files $uri =404;
+        }
+    }
+}
+```
+
+## Variables in Nginx
+
+Nginx provides built-in variables:
+
+- `$host` - Domain name
+- `$uri` - Request path  
+- `$remote_addr` - Client IP
+- `$status` - HTTP status code
+- `$request_method` - GET, POST, etc
+
+Configuration mastered!

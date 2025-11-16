@@ -1,0 +1,42 @@
+---
+title: 'Nginx as an API Gateway'
+date: '2025-11-16'
+draft: false
+summary: 'Route API requests to microservices'
+images: ['/static/courses/learn-nginx/chapter6/banner.png']
+authors: ['default']
+---
+
+# Nginx as an API Gateway
+
+## Route to Microservices
+
+```nginx
+upstream auth_service {
+    server auth:3000;
+}
+
+upstream user_service {
+    server users:3001;
+}
+
+upstream product_service {
+    server products:3002;
+}
+
+server {
+    location /auth {
+        proxy_pass http://auth_service;
+    }
+
+    location /users {
+        proxy_pass http://user_service;
+    }
+
+    location /products {
+        proxy_pass http://product_service;
+    }
+}
+```
+
+Microservices routed!

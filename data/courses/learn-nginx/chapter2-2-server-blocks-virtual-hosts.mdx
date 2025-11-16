@@ -1,0 +1,67 @@
+---
+title: 'Server Blocks and Virtual Hosts'
+date: '2025-11-16'
+draft: false
+summary: 'Host multiple websites on one server'
+images: ['/static/courses/learn-nginx/chapter2/banner.png']
+authors: ['default']
+---
+
+# Server Blocks and Virtual Hosts
+
+## What are Virtual Hosts?
+
+Virtual hosting allows you to run multiple websites on a single server using different domain names.
+
+## Basic Server Block
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+    root /var/www/example;
+
+    location / {
+        try_files $uri =404;
+    }
+}
+```
+
+## Multiple Sites Example
+
+```nginx
+server {
+    listen 80;
+    server_name blog.example.com;
+    root /var/www/blog;
+}
+
+server {
+    listen 80;
+    server_name api.example.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+    }
+}
+```
+
+## Enable/Disable Sites
+
+```bash
+# Create site config
+sudo nano /etc/nginx/sites-available/example.com
+
+# Enable site
+sudo ln -s /etc/nginx/sites-available/example.com \
+           /etc/nginx/sites-enabled/
+
+# Disable site
+sudo rm /etc/nginx/sites-enabled/example.com
+
+# Test and reload
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Virtual hosting made easy!

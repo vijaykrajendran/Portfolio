@@ -1,0 +1,48 @@
+---
+title: 'Debugging Nginx Configuration'
+date: '2025-11-16'
+draft: false
+summary: 'Find and fix configuration issues'
+images: ['/static/courses/learn-nginx/chapter8/banner.png']
+authors: ['default']
+---
+
+# Debugging Configuration
+
+## Test Syntax
+
+```bash
+sudo nginx -t
+```
+
+## Show Full Config
+
+```bash
+sudo nginx -T
+```
+
+## Enable Debug Logs
+
+```nginx
+error_log /var/log/nginx/error.log debug;
+```
+
+## Check Directives
+
+```bash
+# List directive syntax
+man nginx
+
+# Verify specific config
+grep -n "proxy_pass" /etc/nginx/nginx.conf
+```
+
+## Reload and Check
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+sudo systemctl status nginx
+```
+
+Bugs found!

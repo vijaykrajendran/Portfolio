@@ -1,0 +1,45 @@
+---
+title: 'Worker Processes and Connections'
+date: '2025-11-16'
+draft: false
+summary: 'Optimize worker configuration'
+images: ['/static/courses/learn-nginx/chapter5/banner.png']
+authors: ['default']
+---
+
+# Worker Processes and Connections
+
+## Worker Processes
+
+```nginx
+worker_processes auto;
+```
+
+Sets number of workers equal to CPU cores. Let Nginx detect!
+
+## Worker Connections
+
+```nginx
+events {
+    worker_connections 1024;
+}
+```
+
+Maximum connections per worker.
+
+Calculation:
+- Max connections = worker_processes × worker_connections
+- With 4 cores, 1024 connections = 4,096 max connections
+
+## Tuning
+
+```nginx
+worker_processes auto;
+
+events {
+    worker_connections 2048;
+    use epoll;  # Linux only
+}
+```
+
+Maximum performance!

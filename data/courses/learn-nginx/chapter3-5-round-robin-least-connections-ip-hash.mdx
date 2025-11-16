@@ -1,0 +1,50 @@
+---
+title: 'Round Robin, Least Connections, IP Hash'
+date: '2025-11-16'
+draft: false
+summary: 'Deep dive into different LB methods'
+images: ['/static/courses/learn-nginx/chapter3/banner.png']
+authors: ['default']
+---
+
+# Load Balancing Methods Explained
+
+## Round Robin Detailed
+
+Request distribution: S1 → S2 → S3 → S1 → ...
+
+- Simple and fair
+- Default behavior
+- Good for stateless apps
+
+**Use when:** All servers are equal
+
+## Least Connections Detailed
+
+Always sends to server with fewest connections:
+
+- Ideal for long connections
+- Adapts to unequal server capacity
+- Better than round-robin for WebSockets
+
+**Use when:** Connection duration varies
+
+## IP Hash Detailed
+
+Same IP → Same server always
+
+- Sticky sessions
+- No session storage needed
+- Problem: Server down = session loss
+
+**Use when:** Sessions must stick to server
+
+## Comparison Table
+
+| Method | Session Sticky | Fair Distribution | Long Connections |
+|--------|---|---|---|
+| Round Robin | No | Yes | No |
+| Least Conn | No | Yes | Yes |
+| IP Hash | Yes | No | So-so |
+
+Choose wisely!

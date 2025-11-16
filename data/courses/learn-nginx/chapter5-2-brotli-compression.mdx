@@ -1,0 +1,44 @@
+---
+title: 'Brotli Compression'
+date: '2025-11-16'
+draft: false
+summary: 'Next-generation compression with Brotli'
+images: ['/static/courses/learn-nginx/chapter5/banner.png']
+authors: ['default']
+---
+
+# Brotli Compression
+
+## What is Brotli?
+
+Brotli is a modern compression algorithm by Google, better than gzip.
+
+20% smaller files than gzip!
+
+## Install Brotli Module
+
+```bash
+sudo apt install nginx-module-brotli -y
+```
+
+## Configure
+
+```nginx
+http {
+    brotli on;
+    brotli_comp_level 6;
+    brotli_types text/plain text/css application/json application/javascript;
+}
+```
+
+## Browser Support
+
+- Chrome: ✅
+- Firefox: ✅
+- Safari: ✅
+- Edge: ✅
+- IE: ❌
+
+Fallback to gzip for old browsers!
+
+Modern compression!

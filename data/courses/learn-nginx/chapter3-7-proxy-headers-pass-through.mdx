@@ -1,0 +1,60 @@
+---
+title: 'Proxy Headers and Pass Through'
+date: '2025-11-16'
+draft: false
+summary: 'Forward client information to backends'
+images: ['/static/courses/learn-nginx/chapter3/banner.png']
+authors: ['default']
+---
+
+# Proxy Headers and Pass Through
+
+## Essential Headers
+
+Always forward these headers to backends:
+
+```nginx
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+```
+
+## Header Meanings
+
+| Header | Value | Purpose |
+|--------|-------|---------|
+| `Host` | `$host` | Original host requested |
+| `X-Real-IP` | `$remote_addr` | Real client IP |
+| `X-Forwarded-For` | `$proxy_add_x_forwarded_for` | Full IP chain |
+| `X-Forwarded-Proto` | `$scheme` | http or https |
+
+## Why Important?
+
+Backend needs to know:
+- **Original domain** - For virtual hosts
+- **Real client IP** - For logging, auth
+- **Protocol** - For redirects, HSTS
+- **Proxy chain** - For security
+
+## Complete Example
+
+```nginx
+server {
+    location / {
+        proxy_pass http://backend:3000;
+
+        # Essential headers
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Connection settings
+        proxy_set_header Connection "";
+        proxy_http_version 1.1;
+    }
+}
+```
+
+Headers passed!

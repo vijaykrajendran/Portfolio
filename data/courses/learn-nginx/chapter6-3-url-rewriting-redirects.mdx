@@ -1,0 +1,44 @@
+---
+title: 'URL Rewriting and Redirects'
+date: '2025-11-16'
+draft: false
+summary: 'Clean URLs with rewriting'
+images: ['/static/courses/learn-nginx/chapter6/banner.png']
+authors: ['default']
+---
+
+# URL Rewriting and Redirects
+
+## Redirect Directive
+
+```nginx
+# Permanent redirect (301)
+server {
+    server_name www.example.com;
+    return 301 https://example.com$request_uri;
+}
+```
+
+## Rewrite Directive
+
+```nginx
+# Move old URLs to new location
+rewrite ^/old-page$ /new-page permanent;
+
+# Redirect with regex
+rewrite ^/users/(.*)$ /profile/$1 last;
+```
+
+## Clean URL Rewrite
+
+```nginx
+location / {
+    try_files $uri $uri/ @rewrite;
+}
+
+location @rewrite {
+    rewrite ^/(.*)$ /index.php?page=$1 last;
+}
+```
+
+Clean URLs!

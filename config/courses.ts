@@ -16,13 +16,16 @@ export interface Course {
 export const courseSlugMap = {
   go: 'Learn Go',
   'system-design': 'System Design',
+  'learn-mysql': 'Learn Mysql',
+  'learn-nginx': 'Learn Nginx',
+  python: 'Learn Python',
 };
 
 export const courses: Course[] = [
   {
     title: 'Learn Mysql',
-    slug: 'system-design',
-    banner: '/static/courses/system-design/banner.png',
+    slug: 'learn-mysql',
+    banner: '/static/courses/learn-mysql/banner.png',
     description:
       'Learn how to work realtime on Mysql database in production Environment',
     content: [
@@ -345,6 +348,301 @@ export const courses: Course[] = [
         content: [
           { name: 'Next Steps', slug: 'next-steps' },
           { name: 'References', slug: 'references' },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Learn Nginx',
+    slug: 'learn-nginx',
+    banner: '/static/courses/learn-nginx/banner.png',
+    description: 'Master Nginx - the modern web server and load balancer used in production DevOps environments',
+    content: [
+      {
+        name: 'Getting Started',
+        content: [
+          {
+            name: 'Welcome to Nginx',
+            slug: 'welcome-to-nginx',
+          },
+          {
+            name: 'What is Nginx and Why It Matters',
+            slug: 'what-is-nginx-why-it-matters',
+          },
+          {
+            name: 'Introduction to Nginx',
+            slug: '1.Introduction-to-nginx',
+          },
+        ],
+      },
+      {
+          name: 'Chapter I: Installation & Basic Setup',
+          content: [
+            {
+              name: 'Installing Nginx on Linux',
+              slug: 'chapter1-1-installing-nginx-linux',
+            },
+            {
+              name: 'Starting, Stopping, and Managing Nginx Service',
+              slug: 'chapter1-2-managing-nginx-service',
+            },
+            {
+              name: 'Understanding Nginx Configuration Files',
+              slug: 'chapter1-3-nginx-config-files',
+            },
+            {
+              name: 'Directory Structure and Best Practices',
+              slug: 'chapter1-4-nginx-directory-structure',
+            },
+          ],
+        },
+        {
+          name: 'Chapter II: Core Configuration & Virtual Hosts',
+          content: [
+            {
+              name: 'Nginx Configuration Fundamentals',
+              slug: 'chapter2-1-nginx-config-fundamentals',
+            },
+            {
+              name: 'Server Blocks and Virtual Hosts',
+              slug: 'chapter2-2-server-blocks-virtual-hosts',
+            },
+            {
+              name: 'Root and Alias Directives',
+              slug: 'chapter2-3-root-alias-directives',
+            },
+            {
+              name: 'Index Files and Try Files',
+              slug: 'chapter2-4-index-try-files',
+            },
+            {
+              name: 'Location Blocks and Pattern Matching',
+              slug: 'chapter2-5-location-blocks-pattern-matching',
+            },
+          ],
+        },
+        {
+          name: 'Chapter III: Reverse Proxy & Load Balancing',
+          content: [
+            {
+              name: 'Understanding Reverse Proxy',
+              slug: 'chapter3-1-understanding-reverse-proxy',
+            },
+            {
+              name: 'Configuring Nginx as a Reverse Proxy',
+              slug: 'chapter3-2-configuring-reverse-proxy',
+            },
+            {
+              name: 'Upstream Blocks and Backend Servers',
+              slug: 'chapter3-3-upstream-blocks',
+            },
+            {
+              name: 'Load Balancing Algorithms',
+              slug: 'chapter3-4-load-balancing-algorithms',
+            },
+            {
+              name: 'Round Robin, Least Connections, IP Hash',
+              slug: 'chapter3-5-round-robin-least-connections-ip-hash',
+            },
+            {
+              name: 'Health Checks and Failover',
+              slug: 'chapter3-6-health-checks-failover',
+            },
+            {
+              name: 'Proxy Headers and Pass Through',
+              slug: 'chapter3-7-proxy-headers-pass-through',
+            },
+          ],
+        },
+        {
+          name: 'Chapter IV: SSL/TLS & Security',
+          content: [
+            {
+              name: 'Understanding SSL and HTTPS',
+              slug: 'chapter4-1-understanding-ssl-https',
+            },
+            {
+              name: 'Setting Up Self-Signed Certificates',
+              slug: 'chapter4-2-self-signed-certificates',
+            },
+            {
+              name: 'Integrating Let\'s Encrypt with Certbot',
+              slug: 'chapter4-3-lets-encrypt-certbot',
+            },
+            {
+              name: 'Nginx SSL Configuration Best Practices',
+              slug: 'chapter4-4-nginx-ssl-best-practices',
+            },
+            {
+              name: 'HTTP to HTTPS Redirection',
+              slug: 'chapter4-5-http-https-redirection',
+            },
+            {
+              name: 'HSTS and Security Headers',
+              slug: 'chapter4-6-hsts-security-headers',
+            },
+            {
+              name: 'SSL/TLS Termination',
+              slug: 'chapter4-7-ssl-tls-termination',
+            },
+          ],
+        },
+        {
+          name: 'Chapter V: Performance Optimization',
+          content: [
+            {
+              name: 'Gzip Compression',
+              slug: 'chapter5-1-gzip-compression',
+            },
+            {
+              name: 'Brotli Compression',
+              slug: 'chapter5-2-brotli-compression',
+            },
+            {
+              name: 'Browser Caching Strategies',
+              slug: 'chapter5-3-browser-caching-strategies',
+            },
+            {
+              name: 'Open File Cache',
+              slug: 'chapter5-4-open-file-cache',
+            },
+            {
+              name: 'Worker Processes and Connections',
+              slug: 'chapter5-5-worker-processes-connections',
+            },
+            {
+              name: 'Buffer Optimization',
+              slug: 'chapter5-6-buffer-optimization',
+            },
+            {
+              name: 'Timeouts and Keep-Alive',
+              slug: 'chapter5-7-timeouts-keep-alive',
+            },
+          ],
+        },
+        {
+          name: 'Chapter VI: Advanced Topics',
+          content: [
+            {
+              name: 'Rate Limiting and Traffic Control',
+              slug: 'chapter6-1-rate-limiting-traffic-control',
+            },
+            {
+              name: 'Nginx Modules and Extensions',
+              slug: 'chapter6-2-nginx-modules-extensions',
+            },
+            {
+              name: 'URL Rewriting and Redirects',
+              slug: 'chapter6-3-url-rewriting-redirects',
+            },
+            {
+              name: 'Authentication and Access Control',
+              slug: 'chapter6-4-authentication-access-control',
+            },
+            {
+              name: 'Nginx as an API Gateway',
+              slug: 'chapter6-5-nginx-api-gateway',
+            },
+            {
+              name: 'Stream Module for TCP/UDP',
+              slug: 'chapter6-6-stream-module-tcp-udp',
+            },
+          ],
+        },
+        {
+          name: 'Chapter VII: Docker & Kubernetes',
+          content: [
+            {
+              name: 'Dockerizing Nginx Applications',
+              slug: 'chapter7-1-dockerizing-nginx',
+            },
+            {
+              name: 'Building Custom Nginx Docker Images',
+              slug: 'chapter7-2-custom-nginx-docker-images',
+            },
+            {
+              name: 'Nginx Deployment on Kubernetes',
+              slug: 'chapter7-3-nginx-kubernetes-deployment',
+            },
+            {
+              name: 'Nginx ConfigMaps and Secrets in K8s',
+              slug: 'chapter7-4-nginx-configmaps-secrets-k8s',
+            },
+            {
+              name: 'Ingress Controller with Nginx',
+              slug: 'chapter7-5-ingress-controller-nginx',
+            },
+          ],
+        },
+        {
+          name: 'Chapter VIII: Monitoring & Troubleshooting',
+          content: [
+            {
+              name: 'Nginx Logs and Log Analysis',
+              slug: 'chapter8-1-nginx-logs-analysis',
+            },
+            {
+              name: 'Monitoring with Prometheus and Grafana',
+              slug: 'chapter8-2-monitoring-prometheus-grafana',
+            },
+            {
+              name: 'Common Nginx Errors and Fixes',
+              slug: 'chapter8-3-common-nginx-errors',
+            },
+            {
+              name: 'Performance Benchmarking',
+              slug: 'chapter8-4-performance-benchmarking',
+            },
+            {
+              name: 'Debugging Nginx Configuration',
+              slug: 'chapter8-5-debugging-nginx-configuration',
+            },
+          ],
+        },
+        {
+          name: 'Chapter IX: Real-World Projects',
+          content: [
+            {
+              name: 'Multi-Site Hosting Setup',
+              slug: 'chapter9-1-multi-site-hosting-setup',
+            },
+            {
+              name: 'Load Balancing Multiple Backend Services',
+              slug: 'chapter9-2-load-balancing-multiple-backends',
+            },
+            {
+              name: 'Static File Serving with Caching',
+              slug: 'chapter9-3-static-file-serving-caching',
+            },
+            {
+              name: 'Microservices Routing with Nginx',
+              slug: 'chapter9-4-microservices-routing',
+            },
+            {
+              name: 'High-Availability Setup with Failover',
+              slug: 'chapter9-5-high-availability-setup',
+            },
+          ],
+        },
+        {
+          name: 'Appendix',
+          content: [
+            {
+              name: 'Common Configuration Examples',
+              slug: 'appendix-1-common-config-examples',
+            },
+            {
+              name: 'Nginx Directives Reference',
+              slug: 'appendix-2-nginx-directives-reference',
+            },
+            {
+              name: 'Best Practices Checklist',
+              slug: 'appendix-3-best-practices-checklist',
+            },
+            {
+              name: 'Resources and Further Learning',
+              slug: 'appendix-4-resources-further-learning',
+            },
         ],
       },
     ],

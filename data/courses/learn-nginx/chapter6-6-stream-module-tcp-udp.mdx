@@ -1,0 +1,44 @@
+---
+title: 'Stream Module for TCP/UDP'
+date: '2025-11-16'
+draft: false
+summary: 'Proxy TCP/UDP traffic'
+images: ['/static/courses/learn-nginx/chapter6/banner.png']
+authors: ['default']
+---
+
+# Stream Module for TCP/UDP
+
+## TCP Load Balancing
+
+```nginx
+stream {
+    upstream database {
+        server db1:5432;
+        server db2:5432;
+    }
+
+    server {
+        listen 5432;
+        proxy_pass database;
+    }
+}
+```
+
+## UDP Support
+
+```nginx
+stream {
+    upstream dns {
+        server 8.8.8.8:53;
+        server 1.1.1.1:53;
+    }
+
+    server {
+        listen 53 udp;
+        proxy_pass dns;
+    }
+}
+```
+
+TCP/UDP proxying!

@@ -1,0 +1,40 @@
+---
+title: 'Performance Benchmarking'
+date: '2025-11-16'
+draft: false
+summary: 'Test Nginx performance'
+images: ['/static/courses/learn-nginx/chapter8/banner.png']
+authors: ['default']
+---
+
+# Performance Benchmarking
+
+## Apache Bench
+
+```bash
+# 1000 requests, 100 concurrent
+ab -n 1000 -c 100 http://example.com/
+
+# With timing
+ab -n 1000 -c 100 -g results.tsv http://example.com/
+```
+
+## Siege
+
+```bash
+# 100 concurrent, 30 seconds
+siege -c 100 -t 30s http://example.com/
+
+# URLs from file
+siege -f urls.txt
+```
+
+## Vegeta
+
+```bash
+echo "GET http://example.com/" | \
+  vegeta attack -duration=30s | \
+  vegeta report
+```
+
+Performance measured!

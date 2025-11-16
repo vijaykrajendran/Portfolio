@@ -1,0 +1,48 @@
+---
+title: 'Common Configuration Examples'
+date: '2025-11-16'
+draft: false
+summary: 'Ready-to-use configuration snippets'
+images: ['/static/courses/learn-nginx/appendix/banner.png']
+authors: ['default']
+---
+
+# Common Configuration Examples
+
+## Static Website
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+    root /var/www/html;
+    index index.html;
+}
+```
+
+## Reverse Proxy
+
+```nginx
+server {
+    listen 80;
+    location / {
+        proxy_pass http://localhost:3000;
+    }
+}
+```
+
+## Load Balancer
+
+```nginx
+upstream backend {
+    server s1:8080;
+    server s2:8080;
+}
+server {
+    location / {
+        proxy_pass http://backend;
+    }
+}
+```
+
+Copy-paste ready!

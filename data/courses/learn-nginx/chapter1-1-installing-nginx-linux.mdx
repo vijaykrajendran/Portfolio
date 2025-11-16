@@ -1,0 +1,40 @@
+---
+title: 'Installing Nginx on Linux'
+date: '2025-11-16'
+draft: false
+summary: 'Step-by-step installation of Nginx on Ubuntu/Debian'
+images: ['/static/courses/learn-nginx/chapter1/banner.png']
+authors: ['default']
+---
+
+# Installing Nginx on Linux
+
+Let's install Nginx on Linux.
+
+## Prerequisites
+- Ubuntu 20.04+ or Debian 10+
+- sudo access
+
+## Step 1: Update System
+
+```bash
+sudo apt update
+sudo apt upgrade -y
+```
+
+## Step 2: Install Nginx
+
+```bash
+sudo apt install nginx -y
+```
+
+## Step 3: Start Nginx
+
+```bash
+sudo systemctl start nginx
+sudo systemctl enable nginx
+```
+
+## Verify
+
+Open http://localhost - Done!

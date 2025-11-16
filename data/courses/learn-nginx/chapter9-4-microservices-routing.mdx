@@ -1,0 +1,39 @@
+---
+title: 'Microservices Routing with Nginx'
+date: '2025-11-16'
+draft: false
+summary: 'Route to microservices'
+images: ['/static/courses/learn-nginx/chapter9/banner.png']
+authors: ['default']
+---
+
+# Microservices Architecture
+
+## Service Routing
+
+```nginx
+upstream auth {
+    server auth:3000;
+}
+
+upstream users {
+    server users:3001;
+}
+
+upstream products {
+    server products:3002;
+}
+
+upstream orders {
+    server orders:3003;
+}
+
+server {
+    location /auth { proxy_pass http://auth; }
+    location /users { proxy_pass http://users; }
+    location /products { proxy_pass http://products; }
+    location /orders { proxy_pass http://orders; }
+}
+```
+
+Microservices routed!

@@ -1,0 +1,39 @@
+---
+title: 'Multi-Site Hosting Setup'
+date: '2025-11-16'
+draft: false
+summary: 'Production multi-site hosting'
+images: ['/static/courses/learn-nginx/chapter9/banner.png']
+authors: ['default']
+---
+
+# Multi-Site Hosting Setup
+
+## Directory Structure
+
+```
+/etc/nginx/sites-available/
+├── blog.com
+├── api.com
+└── admin.com
+
+/var/www/
+├── blog.com/
+├── api.com/
+└── admin.com/
+```
+
+## Site Configuration
+
+```nginx
+server {
+    listen 80;
+    server_name blog.com www.blog.com;
+    root /var/www/blog.com;
+
+    access_log /var/log/nginx/blog.com.access.log;
+    error_log /var/log/nginx/blog.com.error.log;
+}
+```
+
+Multiple sites served!

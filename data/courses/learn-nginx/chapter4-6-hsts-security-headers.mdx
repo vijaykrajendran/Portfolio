@@ -1,0 +1,67 @@
+---
+title: 'HSTS and Security Headers'
+date: '2025-11-16'
+draft: false
+summary: 'HTTP Strict Transport Security and headers'
+images: ['/static/courses/learn-nginx/chapter4/banner.png']
+authors: ['default']
+---
+
+# HSTS and Security Headers
+
+## HSTS Header
+
+Force HTTPS by setting Strict-Transport-Security:
+
+```nginx
+server {
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+}
+```
+
+**Values:**
+- `max-age=31536000` - 1 year in seconds
+- `includeSubDomains` - Apply to subdomains
+- `preload` - Include in HSTS preload list
+
+## Security Headers
+
+```nginx
+server {
+    # Prevent clickjacking
+    add_header X-Frame-Options "SAMEORIGIN" always;
+
+    # Prevent MIME sniffing
+    add_header X-Content-Type-Options "nosniff" always;
+
+    # XSS protection
+    add_header X-XSS-Protection "1; mode=block" always;
+
+    # Referrer policy
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+
+    # Feature policy
+    add_header Permissions-Policy "geolocation=(), microphone=()" always;
+}
+```
+
+## Complete Example
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name example.com;
+
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+    # HSTS
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    # Security
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+}
+```
+
+Extra security!
