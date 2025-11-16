@@ -1,104 +1,28 @@
 ---
-title: Directory Structure and Best Practices
-description: Organize Nginx files properly
+title: 'Directory Structure'
+date: '2025-11-16'
+draft: false
+summary: 'Organize Nginx properly'
+images: ['/static/courses/learn-nginx/chapter1/banner.png']
+authors: ['default']
 ---
 
-# Nginx Directory Structure and Best Practices
+# Directory Structure
 
-## Standard Directory Layout
+## Layout
 
-### Configuration Directories
 ```
 /etc/nginx/
-├── nginx.conf              # Main configuration
-├── mime.types              # MIME type mappings
-├── conf.d/                 # Additional configuration files
-├── sites-available/        # All site configurations
-├── sites-enabled/          # Enabled sites (symlinks)
-├── snippets/               # Reusable config snippets
-└── modules-enabled/        # Enabled modules
-```
-
-### Web Content Directories
-```
-/var/www/
-├── html/                   # Default site
-├── example.com/            # Site 1
-├── blog.example.com/       # Site 2
-└── api.example.com/        # Site 3
-```
-
-### Log Directories
-```
-/var/log/nginx/
-├── access.log              # All requests
-├── error.log               # Errors
-├── example.com.access.log  # Site-specific
-└── example.com.error.log   # Site-specific
+├── nginx.conf
+├── sites-available/
+├── sites-enabled/
+└── conf.d/
 ```
 
 ## Best Practices
 
-### 1. Use sites-available/sites-enabled
-\`\`\`bash
-# Create site config
-sudo nano /etc/nginx/sites-available/example.com
+- Use sites-available/sites-enabled
+- Keep separate log files
+- Organize by domain
 
-# Enable site
-sudo ln -s /etc/nginx/sites-available/example.com \
-           /etc/nginx/sites-enabled/example.com
-
-# Disable site
-sudo rm /etc/nginx/sites-enabled/example.com
-\`\`\`
-
-### 2. Organize by Domain
-```
-/etc/nginx/sites-available/
-├── example.com
-├── blog.example.com
-├── api.example.com
-└── admin.example.com
-```
-
-### 3. Use Snippets for Reusable Config
-\`\`\`bash
-# Create snippet
-sudo nano /etc/nginx/snippets/ssl-params.conf
-
-# Include in site config
-include snippets/ssl-params.conf;
-\`\`\`
-
-### 4. Keep Separate Log Files
-\`\`\`nginx
-server {
-    access_log /var/log/nginx/example.com.access.log;
-    error_log /var/log/nginx/example.com.error.log;
-}
-\`\`\`
-
-### 5. Comment Your Configs
-\`\`\`nginx
-# Rate limiting zone for API
-limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
-
-server {
-    # Force HTTPS redirect
-    listen 80;
-    return 301 https://$host$request_uri;
-}
-\`\`\`
-
-## File Permissions
-\`\`\`bash
-# Config files
-sudo chmod 644 /etc/nginx/nginx.conf
-sudo chown root:root /etc/nginx/nginx.conf
-
-# Web content
-sudo chmod 755 /var/www/example.com
-sudo chown -R www-data:www-data /var/www/example.com
-\`\`\`
-
-Organization matters!
+Done!

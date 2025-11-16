@@ -1,98 +1,41 @@
 ---
-title: Understanding Nginx Configuration Files
-description: Learn the structure of Nginx configuration
+title: 'Nginx Configuration Files'
+date: '2025-11-16'
+draft: false
+summary: 'Structure of Nginx configuration'
+images: ['/static/courses/learn-nginx/chapter1/banner.png']
+authors: ['default']
 ---
 
-# Understanding Nginx Configuration Files
+# Nginx Configuration Files
 
-## Main Configuration File
-`/etc/nginx/nginx.conf` - The main configuration file
+## Main Config
 
-### Basic Structure
-\`\`\`nginx
+The file `/etc/nginx/nginx.conf` contains:
+
+```nginx
 user nginx;
 worker_processes auto;
 error_log /var/log/nginx/error.log;
-pid /var/run/nginx.pid;
 
 events {
     worker_connections 1024;
 }
 
 http {
-    include /etc/nginx/mime.types;
-    default_type application/octet-stream;
-
-    access_log /var/log/nginx/access.log;
-
-    include /etc/nginx/conf.d/*.conf;
-    include /etc/nginx/sites-enabled/*;
+    server {
+        listen 80;
+        server_name example.com;
+    }
 }
-\`\`\`
-
-## Configuration Contexts
-
-### Main Context (top level)
-Process-level settings
-\`\`\`nginx
-user nginx;
-worker_processes auto;
-error_log /var/log/nginx/error.log;
-\`\`\`
-
-### Events Context
-Connection processing
-\`\`\`nginx
-events {
-    worker_connections 1024;
-    use epoll;
-}
-\`\`\`
-
-### HTTP Context
-Web server settings
-\`\`\`nginx
-http {
-    include mime.types;
-    sendfile on;
-    keepalive_timeout 65;
-}
-\`\`\`
-
-### Server Context
-Virtual host settings
-\`\`\`nginx
-server {
-    listen 80;
-    server_name example.com;
-    root /var/www/example;
-}
-\`\`\`
-
-### Location Context
-URL routing
-\`\`\`nginx
-location / {
-    try_files $uri $uri/ =404;
-}
-\`\`\`
-
-## Include Files
-\`\`\`nginx
-include /etc/nginx/mime.types;
-include /etc/nginx/conf.d/*.conf;
-include /etc/nginx/sites-enabled/*;
-\`\`\`
-
-## Configuration Files Layout
-```
-/etc/nginx/
-├── nginx.conf              # Main config
-├── mime.types              # MIME types
-├── conf.d/                 # Additional configs
-├── sites-available/        # All site configs
-├── sites-enabled/          # Active sites (symlinks)
-└── snippets/               # Reusable config snippets
 ```
 
-You now understand Nginx config structure!
+## Contexts
+
+- Main
+- Events
+- HTTP  
+- Server
+- Location
+
+Done!

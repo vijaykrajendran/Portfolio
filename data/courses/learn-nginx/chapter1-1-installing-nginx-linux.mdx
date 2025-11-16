@@ -1,6 +1,10 @@
 ---
-title: Installing Nginx on Linux
-description: Step-by-step installation of Nginx on Ubuntu/Debian
+title: 'Installing Nginx on Linux'
+date: '2025-11-16'
+draft: false
+summary: 'Step-by-step installation of Nginx on Ubuntu/Debian'
+images: ['/static/courses/learn-nginx/chapter1/banner.png']
+authors: ['default']
 ---
 
 # Installing Nginx on Linux
@@ -8,46 +12,34 @@ description: Step-by-step installation of Nginx on Ubuntu/Debian
 Let's get Nginx installed on your Linux machine!
 
 ## Prerequisites
+
 - Ubuntu 20.04+ or Debian 10+
-- sudo access
+- sudo access  
 - Terminal
 
 ## Step 1: Update System
-\`\`\`bash
+
+```bash
 sudo apt update
 sudo apt upgrade -y
-\`\`\`
+```
 
 ## Step 2: Install Nginx
-\`\`\`bash
+
+```bash
 sudo apt install nginx -y
-\`\`\`
+```
 
-## Step 3: Verify Installation
-\`\`\`bash
-nginx -v
-# Output: nginx version: nginx/1.18.0
-\`\`\`
+## Step 3: Start Nginx
 
-## Step 4: Start Nginx
-\`\`\`bash
+```bash
 sudo systemctl start nginx
 sudo systemctl enable nginx
 sudo systemctl status nginx
-\`\`\`
+```
 
-## Step 5: Test in Browser
+## Step 4: Verify
+
 Open: **http://localhost**
 
-You should see the Nginx welcome page! 🎉
-
-## Important Directories
-```
-/etc/nginx/nginx.conf          - Main config
-/etc/nginx/sites-available/    - All site configs
-/etc/nginx/sites-enabled/      - Active sites
-/var/www/html                  - Default web root
-/var/log/nginx/                - Log files
-```
-
-Done! Nginx is installed and running!
+Done!
