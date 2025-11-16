@@ -1,0 +1,64 @@
+---
+title: 'SSL/TLS Termination'
+date: '2025-11-16'
+draft: false
+summary: 'Decrypt HTTPS at Nginx'
+images: ['/static/courses/learn-nginx/chapter4/banner.png']
+authors: ['default']
+---
+
+# SSL/TLS Termination
+
+## What is SSL Termination?
+
+SSL termination means Nginx handles HTTPS and communicates with backends over HTTP.
+
+```
+Client (HTTPS)
+    ↓
+Nginx (decrypts here)
+    ↓
+Backend (HTTP)
+```
+
+## Why Terminate SSL?
+
+- **Reduce backend CPU** - Encryption is expensive
+- **Centralized certs** - One place to manage
+- **Simpler backend** - Backend doesn't need SSL
+- **Better performance** - Nginx optimized for SSL
+
+## Configuration
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name example.com;
+
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+    location / {
+        # Backend talks HTTP only
+        proxy_pass http://backend:3000;
+
+        # Tell backend it's HTTPS
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```
+
+## Backend Detection
+
+Your backend can detect original protocol:
+
+```javascript
+// Node.js example
+const protocol = req.headers['x-forwarded-proto'];
+if (protocol === 'https') {
+  // Was HTTPS
+}
+```
+
+Smart architecture!

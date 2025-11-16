@@ -1,0 +1,33 @@
+---
+title: 'Buffer Optimization'
+date: '2025-11-16'
+draft: false
+summary: 'Optimize Nginx buffer sizes'
+images: ['/static/courses/learn-nginx/chapter5/banner.png']
+authors: ['default']
+---
+
+# Buffer Optimization
+
+## Buffer Settings
+
+```nginx
+http {
+    client_body_buffer_size 128k;
+    client_max_body_size 100m;
+    proxy_buffer_size 128k;
+    proxy_buffers 4 256k;
+    proxy_busy_buffers_size 256k;
+}
+```
+
+## Settings Explained
+
+| Setting | Default | Purpose |
+|---------|---------|---------|
+| `client_body_buffer_size` | 8-16k | Request body buffer |
+| `client_max_body_size` | 1m | Max upload size |
+| `proxy_buffer_size` | 4-8k | Response buffer |
+| `proxy_buffers` | 8 4k-8k | Multiple buffers |
+
+Efficient memory use!

@@ -1,0 +1,40 @@
+---
+title: 'Ingress Controller with Nginx'
+date: '2025-11-16'
+draft: false
+summary: 'Route Kubernetes traffic with Ingress'
+images: ['/static/courses/learn-nginx/chapter7/banner.png']
+authors: ['default']
+---
+
+# Ingress Controller
+
+## Nginx Ingress Resource
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+spec:
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app
+            port:
+              number: 80
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: api
+            port:
+              number: 3000
+```
+
+K8s routing!

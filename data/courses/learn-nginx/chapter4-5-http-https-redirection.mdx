@@ -1,0 +1,69 @@
+---
+title: 'HTTP to HTTPS Redirection'
+date: '2025-11-16'
+draft: false
+summary: 'Force all traffic to HTTPS'
+images: ['/static/courses/learn-nginx/chapter4/banner.png']
+authors: ['default']
+---
+
+# HTTP to HTTPS Redirection
+
+## Basic Redirect
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name example.com;
+    # SSL config...
+}
+```
+
+## With www
+
+```nginx
+server {
+    listen 80 81;
+    server_name example.com www.example.com;
+    return 301 https://www.example.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name www.example.com;
+    # SSL config...
+}
+```
+
+## Redirect Both
+
+```nginx
+# HTTP to HTTPS
+server {
+    listen 80;
+    server_name _;
+    return 301 https://$host$request_uri;
+}
+
+# Non-www to www
+server {
+    listen 443 ssl http2;
+    server_name example.com;
+    return 301 https://www.example.com$request_uri;
+}
+
+# Main site
+server {
+    listen 443 ssl http2;
+    server_name www.example.com;
+    # Your config...
+}
+```
+
+Always HTTPS!

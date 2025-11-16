@@ -1,0 +1,61 @@
+---
+title: 'Health Checks and Failover'
+date: '2025-11-16'
+draft: false
+summary: 'Automatic server health detection and failover'
+images: ['/static/courses/learn-nginx/chapter3/banner.png']
+authors: ['default']
+---
+
+# Health Checks and Failover
+
+## Passive Health Checks
+
+Nginx automatically detects failed servers by monitoring responses:
+
+```nginx
+upstream backend {
+    server s1:8080 max_fails=3 fail_timeout=30s;
+    server s2:8080 max_fails=3 fail_timeout=30s;
+    server s3:8080 max_fails=3 fail_timeout=30s;
+    server backup:8080 backup;
+}
+```
+
+**Settings:**
+- `max_fails=3` - Mark down after 3 failures
+- `fail_timeout=30s` - Try again after 30 seconds
+- `backup` - Use only if all primary down
+
+## How It Works
+
+1. Nginx detects failed request to server1
+2. Counts as failure
+3. After 3 failures → marks server1 as DOWN
+4. Routes all traffic to server2 and server3
+5. After 30 seconds → tries server1 again
+6. If working → marks as UP
+
+## Production High Availability
+
+```nginx
+upstream backend {
+    least_conn;
+
+    server backend1:8080 weight=2 max_fails=3 fail_timeout=30s;
+    server backend2:8080 weight=2 max_fails=3 fail_timeout=30s;
+    server backend3:8080 weight=1 max_fails=2 fail_timeout=30s;
+
+    server backup:8080 backup max_fails=1 fail_timeout=10s;
+}
+
+server {
+    location / {
+        proxy_pass http://backend;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 10s;
+    }
+}
+```
+
+High availability achieved!

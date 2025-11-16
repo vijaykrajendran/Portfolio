@@ -1,0 +1,46 @@
+---
+title: 'Building Custom Nginx Docker Images'
+date: '2025-11-16'
+draft: false
+summary: 'Create production-ready containers'
+images: ['/static/courses/learn-nginx/chapter7/banner.png']
+authors: ['default']
+---
+
+# Custom Nginx Docker Images
+
+## Advanced Dockerfile
+
+```dockerfile
+FROM nginx:alpine
+RUN apk add --no-cache openssl
+
+COPY nginx.conf /etc/nginx/
+COPY sites/ /etc/nginx/sites-enabled/
+COPY ssl/ /etc/nginx/ssl/
+
+RUN nginx -t
+
+HEALTHCHECK --interval=10s --timeout=3s \
+  CMD curl -f http://localhost/health || exit 1
+
+EXPOSE 80 443
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+## Multi-Stage Build
+
+```dockerfile
+FROM node:latest as builder
+WORKDIR /app
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+Production images!

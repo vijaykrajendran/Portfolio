@@ -1,0 +1,48 @@
+---
+title: 'Timeouts and Keep-Alive'
+date: '2025-11-16'
+draft: false
+summary: 'Connection timeout and keep-alive settings'
+images: ['/static/courses/learn-nginx/chapter5/banner.png']
+authors: ['default']
+---
+
+# Timeouts and Keep-Alive
+
+## Keep-Alive Settings
+
+```nginx
+http {
+    keepalive_timeout 65;
+    keepalive_requests 100;
+}
+```
+
+- `keepalive_timeout` - How long to keep idle connections
+- `keepalive_requests` - Max requests per connection
+
+## Timeout Settings
+
+```nginx
+http {
+    client_body_timeout 12;
+    client_header_timeout 12;
+    send_timeout 10;
+}
+```
+
+- `client_body_timeout` - Time to send body
+- `client_header_timeout` - Time for headers
+- `send_timeout` - Time to send response
+
+## Proxy Timeouts
+
+```nginx
+location / {
+    proxy_connect_timeout 60s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+}
+```
+
+Optimized connections!

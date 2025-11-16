@@ -1,0 +1,47 @@
+---
+title: 'Understanding Reverse Proxy'
+date: '2025-11-16'
+draft: false
+summary: 'Learn reverse proxy fundamentals and architecture'
+images: ['/static/courses/learn-nginx/chapter3/banner.png']
+authors: ['default']
+---
+
+# Understanding Reverse Proxy
+
+## What is a Reverse Proxy?
+
+A reverse proxy sits between clients and backend servers, forwarding requests from clients to backend servers.
+
+```
+Client → Nginx (Reverse Proxy) → Backend Server
+```
+
+The client doesn't know about the actual backend server!
+
+## Why Use Reverse Proxy?
+
+- **Security** - Hide real backend servers
+- **Load balancing** - Distribute traffic
+- **Caching** - Reduce backend load
+- **SSL termination** - Centralized HTTPS
+- **Routing** - Send to different backends
+- **Authentication** - Centralized auth layer
+
+## Basic Setup
+
+```nginx
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+Now users access port 80, but traffic goes to port 3000!
+
+Reverse proxy power!

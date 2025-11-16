@@ -1,0 +1,56 @@
+---
+title: 'Upstream Blocks and Backend Servers'
+date: '2025-11-16'
+draft: false
+summary: 'Define and manage backend server pools'
+images: ['/static/courses/learn-nginx/chapter3/banner.png']
+authors: ['default']
+---
+
+# Upstream Blocks
+
+## What are Upstream Blocks?
+
+Upstream blocks define a pool of backend servers that can be referenced by proxy_pass directives.
+
+## Basic Upstream
+
+```nginx
+upstream backend {
+    server backend1:8080;
+    server backend2:8080;
+    server backend3:8080;
+}
+
+server {
+    location / {
+        proxy_pass http://backend;
+    }
+}
+```
+
+## With Server Weights
+
+Route more traffic to powerful servers:
+
+```nginx
+upstream backend {
+    server backend1:8080 weight=5;  # 5x traffic
+    server backend2:8080 weight=2;  # 2x traffic
+    server backend3:8080 weight=1;  # 1x traffic
+}
+```
+
+## Backup Servers
+
+Use backup when all primary servers are down:
+
+```nginx
+upstream backend {
+    server primary1:8080;
+    server primary2:8080;
+    server backup:8080 backup;
+}
+```
+
+Backend pools configured!

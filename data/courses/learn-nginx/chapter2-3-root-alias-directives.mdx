@@ -1,0 +1,63 @@
+---
+title: 'Root and Alias Directives'
+date: '2025-11-16'
+draft: false
+summary: 'Serve files correctly with root and alias'
+images: ['/static/courses/learn-nginx/chapter2/banner.png']
+authors: ['default']
+---
+
+# Root and Alias Directives
+
+## Root Directive
+
+Use `root` for your main content directory. It appends the request path to the root.
+
+```nginx
+server {
+    root /var/www/example;
+
+    location / {
+        # /file.html maps to /var/www/example/file.html
+    }
+}
+```
+
+## Alias Directive
+
+Use `alias` for special paths. It replaces the location path with the specified directory.
+
+```nginx
+server {
+    location /downloads/ {
+        alias /mnt/storage/files/;
+        # /downloads/file.zip → /mnt/storage/files/file.zip
+    }
+}
+```
+
+## Key Differences
+
+| Feature | Root | Alias |
+|---------|------|-------|
+| Path behavior | Appends | Replaces |
+| Use case | General content | Special paths |
+| Performance | Better | Good |
+
+## Practical Example
+
+```nginx
+server {
+    root /var/www/example;
+
+    location / {
+        try_files $uri =404;
+    }
+
+    location /media/ {
+        alias /var/media/uploads/;
+    }
+}
+```
+
+Choose wisely based on your needs!

@@ -1,0 +1,48 @@
+---
+title: 'Rate Limiting and Traffic Control'
+date: '2025-11-16'
+draft: false
+summary: 'Protect against abuse and DDoS attacks'
+images: ['/static/courses/learn-nginx/chapter6/banner.png']
+authors: ['default']
+---
+
+# Rate Limiting and Traffic Control
+
+## Define Rate Limit Zone
+
+```nginx
+http {
+    limit_req_zone $binary_remote_addr zone=general:10m rate=10r/s;
+    limit_req_zone $binary_remote_addr zone=login:10m rate=5r/m;
+    limit_req_zone $binary_remote_addr zone=api:10m rate=100r/m;
+}
+```
+
+Settings:
+- `$binary_remote_addr` - Limit per IP
+- `zone=name:size` - Zone name and memory
+- `rate=10r/s` - 10 requests per second
+
+## Apply Rate Limit
+
+```nginx
+server {
+    location / {
+        limit_req zone=general burst=20 nodelay;
+        proxy_pass http://backend;
+    }
+
+    location /api {
+        limit_req zone=api burst=10 nodelay;
+        proxy_pass http://api;
+    }
+
+    location /login {
+        limit_req zone=login burst=2 nodelay;
+        proxy_pass http://backend;
+    }
+}
+```
+
+DDoS protected!

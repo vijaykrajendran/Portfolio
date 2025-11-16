@@ -1,0 +1,43 @@
+---
+title: 'Understanding SSL and HTTPS'
+date: '2025-11-16'
+draft: false
+summary: 'SSL/TLS fundamentals for web security'
+images: ['/static/courses/learn-nginx/chapter4/banner.png']
+authors: ['default']
+---
+
+# Understanding SSL and HTTPS
+
+## What is SSL/TLS?
+
+SSL (Secure Sockets Layer) and TLS (Transport Layer Security) are encryption protocols for secure communications.
+
+Modern standard is **TLS 1.2** and **TLS 1.3**.
+
+## Why HTTPS?
+
+- **Encryption** - Data encrypted in transit
+- **Authentication** - Verify server identity
+- **Integrity** - Detect tampering
+- **SEO** - Google ranks HTTPS higher
+- **Trust** - Users trust encrypted sites
+- **Modern features** - Many features require HTTPS
+
+## Certificate Types
+
+| Type | Cost | Validation | Use Case |
+|------|------|-----------|----------|
+| Self-signed | Free | None | Testing only |
+| DV | Cheap | Domain | Most sites |
+| OV | \$\$ | Organization | Business |
+| EV | \$\$\$ | Extended | Banks |
+
+## TLS Versions
+
+- **TLS 1.0** ❌ Deprecated
+- **TLS 1.1** ❌ Deprecated
+- **TLS 1.2** ✅ Use minimum
+- **TLS 1.3** ✅ Best choice
+
+Secure by default!

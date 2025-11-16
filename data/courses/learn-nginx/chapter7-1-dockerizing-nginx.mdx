@@ -1,0 +1,48 @@
+---
+title: 'Dockerizing Nginx Applications'
+date: '2025-11-16'
+draft: false
+summary: 'Run Nginx in Docker containers'
+images: ['/static/courses/learn-nginx/chapter7/banner.png']
+authors: ['default']
+---
+
+# Dockerizing Nginx Applications
+
+## Basic Dockerfile
+
+```dockerfile
+FROM nginx:latest
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY html /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+## Build Image
+
+```bash
+docker build -t my-nginx:1.0 .
+```
+
+## Run Container
+
+```bash
+docker run -p 80:80 my-nginx:1.0
+```
+
+## Docker Compose
+
+```yaml
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./html:/usr/share/nginx/html
+```
+
+Containerized!

@@ -1,0 +1,51 @@
+---
+title: 'Gzip Compression'
+date: '2025-11-16'
+draft: false
+summary: 'Enable gzip compression for faster delivery'
+images: ['/static/courses/learn-nginx/chapter5/banner.png']
+authors: ['default']
+---
+
+# Gzip Compression
+
+## Enable Gzip
+
+```nginx
+http {
+    gzip on;
+    gzip_comp_level 6;
+    gzip_min_length 256;
+    gzip_types text/plain text/css application/json application/javascript;
+    gzip_vary on;
+}
+```
+
+## Settings Explained
+
+- `gzip_comp_level 6` - Compression level 1-9 (1=fast, 9=best)
+- `gzip_min_length 256` - Don't compress files smaller than 256 bytes
+- `gzip_types` - Which content types to compress
+- `gzip_vary` - Add Vary header for caches
+
+## Compression Reduction
+
+With gzip:
+- HTML: 60-70% smaller
+- CSS: 70-80% smaller
+- JavaScript: 60-70% smaller
+- JSON: 50-60% smaller
+
+## Disable for Images
+
+```nginx
+gzip off;
+gzip_types text/plain text/css application/json application/javascript;
+
+# Images already compressed
+location ~* \.(jpg|png|gif|woff|woff2)$ {
+    gzip off;
+}
+```
+
+Speed matters!

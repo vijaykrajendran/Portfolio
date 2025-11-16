@@ -1,0 +1,47 @@
+---
+title: 'Authentication and Access Control'
+date: '2025-11-16'
+draft: false
+summary: 'Protect resources with authentication'
+images: ['/static/courses/learn-nginx/chapter6/banner.png']
+authors: ['default']
+---
+
+# Authentication and Access Control
+
+## Basic Auth
+
+```nginx
+location /admin {
+    auth_basic "Admin Area";
+    auth_basic_user_file /etc/nginx/.htpasswd;
+}
+```
+
+## Create Password File
+
+```bash
+sudo htpasswd -c /etc/nginx/.htpasswd admin
+```
+
+## IP Whitelist
+
+```nginx
+location /admin {
+    allow 192.168.1.0/24;
+    allow 10.0.0.5;
+    deny all;
+}
+```
+
+## Limit Methods
+
+```nginx
+location ~ \.php$ {
+    limit_except GET POST {
+        deny all;
+    }
+}
+```
+
+Protected!

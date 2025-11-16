@@ -1,0 +1,48 @@
+---
+title: 'Common Nginx Errors and Fixes'
+date: '2025-11-16'
+draft: false
+summary: 'Troubleshoot common issues'
+images: ['/static/courses/learn-nginx/chapter8/banner.png']
+authors: ['default']
+---
+
+# Common Nginx Errors
+
+## 502 Bad Gateway
+
+**Cause:** Backend server down or unreachable
+
+**Fix:**
+```bash
+# Check backend
+curl http://backend:3000
+
+# Check upstream
+sudo nginx -t
+```
+
+## 504 Gateway Timeout
+
+**Cause:** Backend too slow
+
+**Fix:**
+```nginx
+proxy_read_timeout 60s;
+proxy_connect_timeout 60s;
+```
+
+## 403 Forbidden
+
+**Cause:** Permission issues
+
+**Fix:**
+```bash
+# Check file permissions
+ls -la /var/www/html
+
+# Check SELinux
+getenforce
+```
+
+Fixed!

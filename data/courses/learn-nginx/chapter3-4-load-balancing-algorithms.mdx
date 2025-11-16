@@ -1,0 +1,68 @@
+---
+title: 'Load Balancing Algorithms'
+date: '2025-11-16'
+draft: false
+summary: 'Different methods to distribute traffic'
+images: ['/static/courses/learn-nginx/chapter3/banner.png']
+authors: ['default']
+---
+
+# Load Balancing Algorithms
+
+## Round Robin (Default)
+
+Requests are distributed equally among all servers:
+
+```nginx
+upstream backend {
+    server s1:8080;
+    server s2:8080;
+    server s3:8080;
+}
+```
+
+Flow: S1 → S2 → S3 → S1 → S2 → ...
+
+**Best for:** Servers with equal capacity
+
+## Least Connections
+
+Route to the server with fewest active connections:
+
+```nginx
+upstream backend {
+    least_conn;
+    server s1:8080;
+    server s2:8080;
+}
+```
+
+**Best for:** Long-lived connections (WebSocket, SSH)
+
+## IP Hash
+
+Same client IP always routes to same server:
+
+```nginx
+upstream backend {
+    ip_hash;
+    server s1:8080;
+    server s2:8080;
+}
+```
+
+**Best for:** Session persistence without shared storage
+
+## Hash on Variable
+
+Hash based on any Nginx variable:
+
+```nginx
+upstream backend {
+    hash $cookie_userid;
+    server s1:8080;
+    server s2:8080;
+}
+```
+
+Choose your method!

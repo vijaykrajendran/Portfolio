@@ -1,0 +1,44 @@
+---
+title: 'Nginx Deployment on Kubernetes'
+date: '2025-11-16'
+draft: false
+summary: 'Deploy Nginx on Kubernetes clusters'
+images: ['/static/courses/learn-nginx/chapter7/banner.png']
+authors: ['default']
+---
+
+# Nginx Deployment on Kubernetes
+
+## Kubernetes Deployment
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+```
+
+Scaled on K8s!

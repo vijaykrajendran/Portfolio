@@ -1,0 +1,36 @@
+---
+title: 'Open File Cache'
+date: '2025-11-16'
+draft: false
+summary: 'Cache frequently accessed files'
+images: ['/static/courses/learn-nginx/chapter5/banner.png']
+authors: ['default']
+---
+
+# Open File Cache
+
+## Enable Open File Cache
+
+```nginx
+http {
+    open_file_cache max=2000 inactive=20s;
+    open_file_cache_valid 30s;
+    open_file_cache_min_uses 2;
+}
+```
+
+## Settings
+
+- `max=2000` - Cache up to 2000 files
+- `inactive=20s` - Remove if not used for 20 seconds
+- `open_file_cache_valid 30s` - Revalidate every 30 seconds
+- `open_file_cache_min_uses 2` - Only cache if used 2+ times
+
+## What It Caches
+
+- File existence
+- File size
+- Modification time
+- File permissions
+
+Faster file access!

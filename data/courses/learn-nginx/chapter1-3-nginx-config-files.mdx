@@ -9,14 +9,13 @@ authors: ['default']
 
 # Nginx Configuration Files
 
-## Main Config
+The main config file is `/etc/nginx/nginx.conf`
 
-The file `/etc/nginx/nginx.conf` contains:
+## Basic Structure
 
 ```nginx
 user nginx;
 worker_processes auto;
-error_log /var/log/nginx/error.log;
 
 events {
     worker_connections 1024;
@@ -29,13 +28,5 @@ http {
     }
 }
 ```
-
-## Contexts
-
-- Main
-- Events
-- HTTP  
-- Server
-- Location
 
 Done!
