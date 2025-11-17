@@ -1,5 +1,5 @@
 ---
-title: 'Automate Your Code Checks with pre-commit: A Beginner's Guide'
+title: 'Automate Your Code Checks with pre-commit: A Beginners Guide'
 date: '2025-11-17'
 tags: ['pre-commit', 'Git Hooks', 'DevOps', 'Code Quality', 'CI/CD', 'Best Practices']
 draft: false
