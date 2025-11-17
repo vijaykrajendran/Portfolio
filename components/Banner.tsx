@@ -34,7 +34,7 @@ function Banner(props: BannerProps): React.ReactElement {
             animationDuration={2000}
             color={aboutColor}
           >
-            about me 
+            about me
           </RoughNotation>
         </Link>
         or
@@ -50,13 +50,13 @@ function Banner(props: BannerProps): React.ReactElement {
           </RoughNotation>
         </Link>
       </p>
-      
+
       <p className='my-3 text-lg lg:my-2 lg:text-1xl'>
         Checkout my latest
         <Link className='ml-4 mr-4 font-normal text-red' href='/blog'>
           <RoughNotation
             show
-            type='circle' 
+            type='circle'
             animationDelay={250}
             animationDuration={2000}
             color={contactColor}
