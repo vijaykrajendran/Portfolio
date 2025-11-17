@@ -12,7 +12,7 @@ authors: ['default']
 ## The Command
 
 ```bash
-sort -rnk3 file 
+sort -rnk3 file
 ```
 
 ## Sorting a File Using the `sort` Command
@@ -40,13 +40,13 @@ date 40 20
 
 ### Command: `sort -rnk3 file`
 
-1. **Sort by Third Column (Numerical)**: 
+1. **Sort by Third Column (Numerical)**:
     - `15`
     - `5`
     - `25`
     - `20`
 
-2. **Sort in Reverse Order**: 
+2. **Sort in Reverse Order**:
     - `25`
     - `20`
     - `15`
