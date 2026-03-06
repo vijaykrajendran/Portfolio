@@ -149,7 +149,7 @@ const phases = [
       {
         title: 'Understand WHY descheduler exists',
         detail:
-          'After node upgrades or scaling events, pods pile up on certain nodes. The scheduler won't fix this. Key insight: descheduler evicts, it does not schedule.',
+          "After node upgrades or scaling events, pods pile up on certain nodes. The scheduler won't fix this. Key insight: descheduler evicts, it does not schedule.",
         cmd: '',
       },
       {
