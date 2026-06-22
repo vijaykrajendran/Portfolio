@@ -170,14 +170,16 @@ export default function App() {
       try {
         const r = await window.storage.get("vj-ai-devops-progress");
         if (r) setProgress(JSON.parse(r.value));
-      } catch (_) {}
+      } catch (_) {
+        // Ignore storage errors
+      }
       setLoaded(true);
     })();
   }, []);
 
   const save = async (next) => {
     setProgress(next);
-    try { await window.storage.set("vj-ai-devops-progress", JSON.stringify(next)); } catch (_) {}
+    try { await window.storage.set("vj-ai-devops-progress", JSON.stringify(next)); } catch (_) { /* Ignore storage errors */ }
   };
 
   const setStatus = (id, status) => {
@@ -250,7 +252,10 @@ export default function App() {
                     <div key={step.id} style={{ background: "#13131f", border: `1px solid ${status === "done" ? "#1a3a2a" : status === "in_progress" ? "#1a2a4a" : "#1e1e2e"}`, borderRadius: 10, overflow: "hidden", transition: "border-color 0.2s" }}>
                       {/* Step row */}
                       <div
+                        role="button"
+                        tabIndex={0}
                         onClick={() => setExpanded(isOpen ? null : step.id)}
+                        onKeyDown={(e) => e.key === 'Enter' && setExpanded(isOpen ? null : step.id)}
                         style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", cursor: "pointer" }}
                       >
                         {/* Step number */}
