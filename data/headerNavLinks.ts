@@ -8,6 +8,7 @@ const headerNavLinks = [
   { href: '/contact', title: 'Disturb_ME' },
   { href: '/k8s-tools', title: 'K8s Tools' },
   { href: '/k8s-roadmap', title: 'K8s Roadmap' },
+  { href: '/ai-devops-tracker', title: 'AI DevOps' },
 ];
 
 export default headerNavLinks;
