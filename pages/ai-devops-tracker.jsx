@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 
@@ -7,9 +7,14 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 // ─────────────────────────────────────────────────────────────────────
 
-const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
-  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  : null;
+// Create client only in browser (not during SSR/build)
+const getSupabase = () => {
+  if (typeof window === 'undefined') return null;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+};
+
+const SUPABASE_CONFIGURED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
 
 const LOCAL_KEY = 'vj-ai-devops-v1';
 
@@ -148,9 +153,13 @@ export default function AIDevOpsTracker() {
   const [user, setUser] = useState(null);
   const [syncStatus, setSyncStatus] = useState('idle'); // idle | syncing | saved | error
   const [authLoading, setAuthLoading] = useState(false);
+  const supabaseRef = useRef(null);
 
   // ── Auth listener + initial load ──────────────────────────────────
   useEffect(() => {
+    const supabase = getSupabase();
+    supabaseRef.current = supabase;
+
     if (!supabase) {
       // No Supabase config yet — fall back to localStorage only
       try {
@@ -175,7 +184,7 @@ export default function AIDevOpsTracker() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        loadFromSupabase(session.user.id);
+        loadFromSupabase(session.user.id, supabase);
       } else {
         setLoaded(true);
       }
@@ -186,7 +195,7 @@ export default function AIDevOpsTracker() {
       const u = session?.user ?? null;
       setUser(u);
       if (u) {
-        loadFromSupabase(u.id);
+        loadFromSupabase(u.id, supabase);
       }
     });
 
@@ -194,7 +203,7 @@ export default function AIDevOpsTracker() {
   }, []);
 
   // ── Load progress from Supabase ───────────────────────────────────
-  const loadFromSupabase = async (userId) => {
+  const loadFromSupabase = async (userId, supabase) => {
     setSyncStatus('syncing');
     try {
       const { data, error } = await supabase
@@ -226,6 +235,7 @@ export default function AIDevOpsTracker() {
       // Ignore localStorage errors
     }
 
+    const supabase = supabaseRef.current;
     if (!supabase || !user) return;
 
     setSyncStatus('syncing');
@@ -245,6 +255,7 @@ export default function AIDevOpsTracker() {
 
   // ── GitHub OAuth ──────────────────────────────────────────────────
   const signIn = async () => {
+    const supabase = supabaseRef.current;
     if (!supabase) return;
     setAuthLoading(true);
     await supabase.auth.signInWithOAuth({
@@ -254,6 +265,7 @@ export default function AIDevOpsTracker() {
   };
 
   const signOut = async () => {
+    const supabase = supabaseRef.current;
     if (!supabase) return;
     await supabase.auth.signOut();
     setUser(null);
@@ -599,7 +611,7 @@ export default function AIDevOpsTracker() {
 
       <footer className="site-footer">
         <div className="auth-bar">
-          {!supabase ? (
+          {!SUPABASE_CONFIGURED ? (
             <span style={{ color: 'var(--muted)' }}>⚠ add supabase env vars to enable sync</span>
           ) : user ? (
             <>
