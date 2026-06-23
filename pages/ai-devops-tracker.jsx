@@ -2,10 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 
-// ─── REPLACE THESE TWO VALUES after creating your Supabase project ───
+// ─── Supabase config ─────────────────────────────────────────────────
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-// ─────────────────────────────────────────────────────────────────────
 
 // Create client only in browser (not during SSR/build)
 const getSupabase = () => {
@@ -150,27 +149,16 @@ export default function AIDevOpsTracker() {
   const [progress, setProgress] = useState({});
   const [expanded, setExpanded] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  const [user, setUser] = useState(null);
   const [syncStatus, setSyncStatus] = useState('idle'); // idle | syncing | saved | error
-  const [authLoading, setAuthLoading] = useState(false);
   const supabaseRef = useRef(null);
 
-  // ── Auth listener + initial load ──────────────────────────────────
+  // Fixed tracker ID - all devices share this
+  const TRACKER_ID = 'vj-main';
+
+  // ── Auto-load on mount ────────────────────────────────────────────
   useEffect(() => {
     const supabase = getSupabase();
     supabaseRef.current = supabase;
-
-    if (!supabase) {
-      // No Supabase config yet — fall back to localStorage only
-      try {
-        const saved = localStorage.getItem(LOCAL_KEY);
-        if (saved) setProgress(JSON.parse(saved));
-      } catch (e) {
-        // Ignore localStorage errors
-      }
-      setLoaded(true);
-      return;
-    }
 
     // Load local cache immediately for instant render
     try {
@@ -180,45 +168,34 @@ export default function AIDevOpsTracker() {
       // Ignore localStorage errors
     }
 
-    // Get current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        loadFromSupabase(session.user.id, supabase);
-      } else {
-        setLoaded(true);
-      }
-    });
+    if (!supabase) {
+      setLoaded(true);
+      return;
+    }
 
-    // Listen for auth changes (OAuth redirect callback)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      const u = session?.user ?? null;
-      setUser(u);
-      if (u) {
-        loadFromSupabase(u.id, supabase);
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    // Auto-load from Supabase
+    loadFromSupabase(supabase);
   }, []);
 
   // ── Load progress from Supabase ───────────────────────────────────
-  const loadFromSupabase = async (userId, supabase) => {
+  const loadFromSupabase = async (supabase) => {
     setSyncStatus('syncing');
     try {
       const { data, error } = await supabase
         .from('tracker_progress')
         .select('progress')
-        .eq('user_id', userId)
+        .eq('tracker_id', TRACKER_ID)
         .single();
 
       if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
 
-      const remote = data?.progress ?? {};
-      setProgress(remote);
-      localStorage.setItem(LOCAL_KEY, JSON.stringify(remote));
+      if (data?.progress) {
+        setProgress(data.progress);
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(data.progress));
+      }
       setSyncStatus('saved');
     } catch (e) {
+      console.error('Load error:', e);
       setSyncStatus('error');
     } finally {
       setLoaded(true);
@@ -236,41 +213,26 @@ export default function AIDevOpsTracker() {
     }
 
     const supabase = supabaseRef.current;
-    if (!supabase || !user) return;
+    if (!supabase) return;
 
     setSyncStatus('syncing');
     try {
       const { error } = await supabase
         .from('tracker_progress')
-        .upsert({ user_id: user.id, progress: next, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+        .upsert(
+          { tracker_id: TRACKER_ID, progress: next, updated_at: new Date().toISOString() },
+          { onConflict: 'tracker_id' }
+        );
       if (error) throw error;
       setSyncStatus('saved');
     } catch (e) {
+      console.error('Save error:', e);
       setSyncStatus('error');
     }
   };
 
   const setStatus = (id, status) => save({ ...progress, [id]: status });
   const toggleStep = (stepId) => setExpanded(expanded === stepId ? null : stepId);
-
-  // ── GitHub OAuth ──────────────────────────────────────────────────
-  const signIn = async () => {
-    const supabase = supabaseRef.current;
-    if (!supabase) return;
-    setAuthLoading(true);
-    await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: { redirectTo: window.location.href },
-    });
-  };
-
-  const signOut = async () => {
-    const supabase = supabaseRef.current;
-    if (!supabase) return;
-    await supabase.auth.signOut();
-    setUser(null);
-    setSyncStatus('idle');
-  };
 
   // ── Stats ─────────────────────────────────────────────────────────
   const allSteps = ROADMAP.flatMap(w => w.steps);
@@ -612,30 +574,17 @@ export default function AIDevOpsTracker() {
       <footer className="site-footer">
         <div className="auth-bar">
           {!SUPABASE_CONFIGURED ? (
-            <span style={{ color: 'var(--muted)' }}>⚠ add supabase env vars to enable sync</span>
-          ) : user ? (
-            <>
-              <span className="sync-indicator" style={{
-                color: syncStatus === 'saved' ? 'var(--green)' :
-                       syncStatus === 'syncing' ? 'var(--blue)' :
-                       syncStatus === 'error' ? '#f87171' : 'var(--muted)',
-              }}>
-                {syncStatus === 'saved' ? '✓ synced' :
-                 syncStatus === 'syncing' ? '⟳ syncing…' :
-                 syncStatus === 'error' ? '✗ sync error' : '◌ connected'}
-              </span>
-              <span style={{ color: 'var(--faint)' }}>·</span>
-              <span style={{ color: 'var(--muted)' }}>{user.user_metadata?.user_name ?? user.email}</span>
-              <span style={{ color: 'var(--faint)' }}>·</span>
-              <button className="auth-btn auth-btn-signout" onClick={signOut}>sign out</button>
-            </>
+            <span style={{ color: 'var(--muted)' }}>progress saved locally</span>
           ) : (
-            <button className="auth-btn auth-btn-github" onClick={signIn} disabled={authLoading}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/>
-              </svg>
-              {authLoading ? 'redirecting…' : 'sign in with github'}
-            </button>
+            <span className="sync-indicator" style={{
+              color: syncStatus === 'saved' ? 'var(--green)' :
+                     syncStatus === 'syncing' ? 'var(--blue)' :
+                     syncStatus === 'error' ? '#f87171' : 'var(--muted)',
+            }}>
+              {syncStatus === 'saved' ? '✓ synced across devices' :
+               syncStatus === 'syncing' ? '⟳ syncing…' :
+               syncStatus === 'error' ? '✗ sync error (saved locally)' : '◌ connected'}
+            </span>
           )}
         </div>
         <div>
