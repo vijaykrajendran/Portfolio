@@ -1,5 +1,17 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { createClient } from '@supabase/supabase-js';
+
+// ─── REPLACE THESE TWO VALUES after creating your Supabase project ───
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// ─────────────────────────────────────────────────────────────────────
+
+const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+const LOCAL_KEY = 'vj-ai-devops-v1';
 
 const ROADMAP = [
   {
@@ -129,46 +141,131 @@ const ROADMAP = [
   },
 ];
 
-const STORAGE_KEY = 'vj-ai-devops-v1';
-
 export default function AIDevOpsTracker() {
   const [progress, setProgress] = useState({});
   const [expanded, setExpanded] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [user, setUser] = useState(null);
+  const [syncStatus, setSyncStatus] = useState('idle'); // idle | syncing | saved | error
+  const [authLoading, setAuthLoading] = useState(false);
 
+  // ── Auth listener + initial load ──────────────────────────────────
   useEffect(() => {
+    if (!supabase) {
+      // No Supabase config yet — fall back to localStorage only
+      try {
+        const saved = localStorage.getItem(LOCAL_KEY);
+        if (saved) setProgress(JSON.parse(saved));
+      } catch (e) {
+        // Ignore localStorage errors
+      }
+      setLoaded(true);
+      return;
+    }
+
+    // Load local cache immediately for instant render
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(LOCAL_KEY);
       if (saved) setProgress(JSON.parse(saved));
     } catch (e) {
-      // Ignore storage errors
+      // Ignore localStorage errors
     }
-    setLoaded(true);
+
+    // Get current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        loadFromSupabase(session.user.id);
+      } else {
+        setLoaded(true);
+      }
+    });
+
+    // Listen for auth changes (OAuth redirect callback)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) {
+        loadFromSupabase(u.id);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const save = (next) => {
-    setProgress(next);
+  // ── Load progress from Supabase ───────────────────────────────────
+  const loadFromSupabase = async (userId) => {
+    setSyncStatus('syncing');
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      const { data, error } = await supabase
+        .from('tracker_progress')
+        .select('progress')
+        .eq('user_id', userId)
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
+
+      const remote = data?.progress ?? {};
+      setProgress(remote);
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(remote));
+      setSyncStatus('saved');
     } catch (e) {
-      // Ignore storage errors
+      setSyncStatus('error');
+    } finally {
+      setLoaded(true);
     }
   };
 
-  const setStatus = (id, status) => {
-    save({ ...progress, [id]: status });
+  // ── Save progress ─────────────────────────────────────────────────
+  const save = async (next) => {
+    setProgress(next);
+    // Always write localStorage instantly
+    try {
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(next));
+    } catch (e) {
+      // Ignore localStorage errors
+    }
+
+    if (!supabase || !user) return;
+
+    setSyncStatus('syncing');
+    try {
+      const { error } = await supabase
+        .from('tracker_progress')
+        .upsert({ user_id: user.id, progress: next, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+      if (error) throw error;
+      setSyncStatus('saved');
+    } catch (e) {
+      setSyncStatus('error');
+    }
   };
 
-  const toggleStep = (stepId) => {
-    setExpanded(expanded === stepId ? null : stepId);
+  const setStatus = (id, status) => save({ ...progress, [id]: status });
+  const toggleStep = (stepId) => setExpanded(expanded === stepId ? null : stepId);
+
+  // ── GitHub OAuth ──────────────────────────────────────────────────
+  const signIn = async () => {
+    if (!supabase) return;
+    setAuthLoading(true);
+    await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: { redirectTo: window.location.href },
+    });
   };
 
+  const signOut = async () => {
+    if (!supabase) return;
+    await supabase.auth.signOut();
+    setUser(null);
+    setSyncStatus('idle');
+  };
+
+  // ── Stats ─────────────────────────────────────────────────────────
   const allSteps = ROADMAP.flatMap(w => w.steps);
   const doneCount = allSteps.filter(s => progress[s.id] === 'done').length;
   const progCount = allSteps.filter(s => progress[s.id] === 'in_progress').length;
   const leftCount = allSteps.length - doneCount - progCount;
   const pct = Math.round((doneCount / allSteps.length) * 100);
-
   const blockBar = Array.from({ length: 10 }, (_, i) => i < Math.round(pct / 10));
 
   if (!loaded) return null;
@@ -186,270 +283,190 @@ export default function AIDevOpsTracker() {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg:        #080c14;
-          --surface:   #0d1220;
-          --surface2:  #111827;
-          --border:    #1c2840;
-          --border2:   #243044;
-          --blue:      #3b82f6;
-          --blue-dim:  #1e3a6a;
-          --cyan:      #22d3ee;
-          --cyan-dim:  #0a2535;
-          --green:     #10b981;
-          --green-dim: #092a1e;
-          --amber:     #f59e0b;
-          --text:      #e8eef8;
-          --muted:     #8896aa;
-          --faint:     #2a3548;
-          --mono:      'JetBrains Mono', monospace;
-          --sans:      'Inter', system-ui, sans-serif;
+          --bg: #0a0a14;
+          --surface: #0f0f1e;
+          --surface2: #141428;
+          --border: #1e1e38;
+          --faint: #2a2a4a;
+          --muted: #6b7280;
+          --text: #e2e8f0;
+          --cyan: #22d3ee;
+          --blue: #818cf8;
+          --blue-dim: #1a1a35;
+          --green: #34d399;
+          --green-dim: #0a2a1a;
+          --mono: 'JetBrains Mono', monospace;
+          --sans: 'Inter', sans-serif;
         }
 
-        html { scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
 
         .site-header {
+          background: linear-gradient(180deg, #0d0d20 0%, var(--bg) 100%);
           border-bottom: 1px solid var(--border);
-          padding: 32px 24px 28px;
+          padding: 32px 20px 28px;
         }
-        .header-inner { max-width: 680px; margin: 0 auto; }
-
+        .header-inner { max-width: 740px; margin: 0 auto; }
         .terminal-label {
-          font-family: var(--mono);
-          font-size: 11px;
-          color: var(--cyan);
-          letter-spacing: 0.08em;
-          margin-bottom: 10px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
+          font-family: var(--mono); font-size: 10px; color: var(--green);
+          letter-spacing: 0.12em; margin-bottom: 10px;
+          display: flex; align-items: center; gap: 6px;
         }
         .terminal-label::before {
-          content: '';
-          display: inline-block;
-          width: 8px; height: 8px;
-          background: var(--cyan);
-          border-radius: 50%;
-          animation: pulse 2s ease-in-out infinite;
+          content: ''; display: inline-block; width: 6px; height: 6px;
+          border-radius: 50%; background: var(--green);
+          box-shadow: 0 0 6px var(--green);
         }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
         h1.tracker-title {
-          font-size: 26px;
-          font-weight: 700;
-          color: var(--text);
-          letter-spacing: -0.02em;
-          line-height: 1.2;
-          margin-bottom: 4px;
+          font-family: var(--sans); font-size: 26px; font-weight: 700;
+          color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px;
         }
         h1.tracker-title span { color: var(--cyan); }
         .subtitle {
-          font-size: 13px;
-          color: var(--muted);
-          margin-bottom: 24px;
-          font-family: var(--mono);
+          font-family: var(--mono); font-size: 11px; color: var(--muted);
+          margin-bottom: 20px;
         }
 
-        .summary-bar {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: 10px;
-          padding: 16px 20px;
-          display: flex;
-          gap: 20px;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-        .pct-block { text-align: center; min-width: 52px; }
+        .summary-bar { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .pct-block { display: flex; flex-direction: column; align-items: flex-start; }
         .pct-num {
-          font-family: var(--mono);
-          font-size: 30px;
-          font-weight: 700;
-          color: var(--text);
-          line-height: 1;
+          font-family: var(--mono); font-size: 36px; font-weight: 700; color: var(--cyan);
+          line-height: 1; letter-spacing: -0.03em;
         }
-        .pct-num sup { font-size: 14px; color: var(--muted); }
-        .pct-label { font-size: 10px; color: var(--muted); margin-top: 2px; font-family: var(--mono); }
-
-        .progress-right { flex: 1; min-width: 180px; }
-        .block-bar {
-          font-family: var(--mono);
-          font-size: 13px;
-          letter-spacing: 2px;
-          color: var(--cyan);
-          margin-bottom: 8px;
-          word-break: break-all;
-        }
+        .pct-num sup { font-size: 14px; }
+        .pct-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; }
+        .progress-right { display: flex; flex-direction: column; gap: 6px; }
+        .block-bar { font-family: var(--mono); font-size: 18px; color: var(--cyan); letter-spacing: 2px; }
         .block-bar .empty { color: var(--faint); }
-        .stats-row { display: flex; gap: 16px; flex-wrap: wrap; }
-        .stat { font-size: 11px; font-family: var(--mono); }
-        .stat.done  { color: var(--green); }
-        .stat.prog  { color: var(--blue); }
-        .stat.left  { color: var(--muted); }
+        .stats-row { display: flex; gap: 14px; flex-wrap: wrap; }
+        .stat { font-family: var(--mono); font-size: 10px; }
+        .stat.done { color: var(--green); }
+        .stat.prog { color: var(--blue); }
+        .stat.left { color: var(--muted); }
 
-        .main-tracker { max-width: 680px; margin: 0 auto; padding: 0 24px 60px; }
+        .main-tracker { max-width: 740px; margin: 0 auto; padding: 28px 20px 60px; }
 
-        .week { margin-top: 36px; }
+        .week { margin-bottom: 32px; }
         .week-header {
-          display: flex;
-          align-items: baseline;
-          gap: 10px;
-          margin-bottom: 14px;
-          padding-bottom: 10px;
-          border-bottom: 1px solid var(--border);
+          display: flex; align-items: center; gap: 10px;
+          margin-bottom: 10px; flex-wrap: wrap;
         }
         .week-tag {
-          font-family: var(--mono);
-          font-size: 10px;
-          font-weight: 700;
-          color: var(--cyan);
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          background: var(--cyan-dim);
-          padding: 3px 8px;
-          border-radius: 4px;
-          border: 1px solid #0e3a4a;
+          font-family: var(--mono); font-size: 9px; font-weight: 700;
+          background: var(--surface2); border: 1px solid var(--border);
+          color: var(--cyan); padding: 3px 9px; border-radius: 4px;
+          letter-spacing: 0.1em;
         }
-        .week-title { font-size: 14px; font-weight: 600; color: var(--text); }
-        .week-days { font-size: 11px; color: var(--muted); margin-left: auto; font-family: var(--mono); }
-        .week-pct  { font-size: 11px; font-weight: 700; font-family: var(--mono); }
+        .week-title { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
+        .week-days { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+        .week-pct { font-family: var(--mono); font-size: 10px; font-weight: 700; }
 
         .step-list { display: flex; flex-direction: column; gap: 6px; }
-
         .step-card {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: 10px;
-          overflow: hidden;
-          transition: border-color 0.2s;
+          background: var(--surface); border: 1px solid var(--border);
+          border-radius: 10px; overflow: hidden; transition: border-color 0.2s;
         }
-        .step-card.in_progress { border-color: var(--blue-dim); }
-        .step-card.done        { border-color: #0e3a22; }
+        .step-card.in_progress { border-color: #2a2a55; }
+        .step-card.done { border-color: #1a3a28; }
+        .step-card.open { border-color: var(--blue); }
 
         .step-header {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 13px 14px;
-          cursor: pointer;
-          user-select: none;
+          display: flex; align-items: center; gap: 12px;
+          padding: 12px 14px; cursor: pointer; user-select: none;
         }
-        .step-header:hover .step-title { color: var(--cyan); }
-
+        .step-header:hover { background: var(--surface2); }
         .step-num {
-          width: 28px; height: 28px;
-          border-radius: 50%;
-          border: 2px solid var(--faint);
+          width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
           display: flex; align-items: center; justify-content: center;
-          font-family: var(--mono);
-          font-size: 10px;
-          font-weight: 700;
-          color: var(--muted);
-          flex-shrink: 0;
-          transition: all 0.2s;
+          font-family: var(--mono); font-size: 11px; font-weight: 700;
+          background: var(--surface2); border: 1px solid var(--faint); color: var(--muted);
         }
-        .step-card.in_progress .step-num { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
-        .step-card.done        .step-num { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+        .done .step-num { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+        .in_progress .step-num { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
 
         .step-info { flex: 1; min-width: 0; }
-        .step-title { font-size: 13px; font-weight: 600; color: var(--text); transition: color 0.15s; }
-        .step-meta  { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: var(--mono); }
+        .step-title { font-size: 13px; font-weight: 600; color: var(--text); }
+        .step-meta { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 1px; }
 
         .status-pill {
-          font-size: 10px;
-          font-weight: 700;
-          font-family: var(--mono);
-          padding: 3px 9px;
-          border-radius: 20px;
-          white-space: nowrap;
-          flex-shrink: 0;
-          border: 1px solid transparent;
+          font-family: var(--mono); font-size: 9px; font-weight: 700;
+          padding: 3px 9px; border-radius: 20px; letter-spacing: 0.06em;
+          border: 1px solid; white-space: nowrap; flex-shrink: 0;
         }
-        .pill-not_started { color: var(--muted);  background: var(--surface2); border-color: var(--faint); }
-        .pill-in_progress { color: var(--blue);   background: var(--blue-dim); border-color: #2a4a8a; }
-        .pill-done        { color: var(--green);  background: var(--green-dim);border-color: #0e4a28; }
+        .pill-not_started { color: var(--muted); border-color: var(--faint); background: transparent; }
+        .pill-in_progress { color: var(--blue); border-color: var(--blue); background: var(--blue-dim); }
+        .pill-done { color: var(--green); border-color: var(--green); background: var(--green-dim); }
 
-        .chevron { color: var(--faint); font-size: 9px; flex-shrink: 0; transition: transform 0.2s; }
-        .step-card.open .chevron { transform: rotate(180deg); }
+        .chevron { color: var(--muted); font-size: 9px; transition: transform 0.2s; flex-shrink: 0; }
+        .open .chevron { transform: rotate(180deg); }
 
-        .step-detail {
-          display: none;
-          padding: 0 14px 14px;
-          border-top: 1px solid var(--border);
-        }
-        .step-card.open .step-detail { display: block; }
+        .step-detail { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
+        .open .step-detail { display: block; padding-top: 12px; }
 
-        .detail-section { margin-top: 13px; }
+        .detail-section { margin-bottom: 12px; }
         .detail-label {
-          font-family: var(--mono);
-          font-size: 9px;
-          font-weight: 700;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: var(--muted);
-          margin-bottom: 7px;
+          font-family: var(--mono); font-size: 9px; font-weight: 700;
+          color: var(--cyan); letter-spacing: 0.1em; margin-bottom: 7px;
         }
 
-        .action-item {
-          display: flex;
-          gap: 8px;
-          margin-bottom: 5px;
-          font-size: 12px;
-          color: #94a3b8;
-          line-height: 1.55;
-        }
-        .action-arrow { color: var(--blue); flex-shrink: 0; font-family: var(--mono); }
+        .action-item { display: flex; gap: 8px; margin-bottom: 5px; align-items: flex-start; }
+        .action-arrow { color: var(--blue); font-family: var(--mono); font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+        .action-item span:last-child { font-size: 12px; color: var(--text); line-height: 1.5; }
 
         .tools-row { display: flex; gap: 5px; flex-wrap: wrap; }
         .tool-chip {
-          font-size: 10px;
-          font-family: var(--mono);
-          background: #121830;
-          border: 1px solid #2a2a4a;
-          color: #818cf8;
-          padding: 3px 9px;
-          border-radius: 20px;
+          font-size: 10px; font-family: var(--mono);
+          background: #121830; border: 1px solid #2a2a4a;
+          color: #818cf8; padding: 3px 9px; border-radius: 20px;
         }
 
         .done-box {
-          background: var(--green-dim);
-          border: 1px solid #1a4a30;
-          border-radius: 8px;
-          padding: 10px 12px;
+          background: var(--green-dim); border: 1px solid #1a4a30;
+          border-radius: 8px; padding: 10px 12px;
         }
         .done-box .detail-label { color: var(--green); margin-bottom: 4px; }
         .done-box p { font-size: 12px; color: #6ee7b7; line-height: 1.5; }
 
         .status-buttons { display: flex; gap: 6px; margin-top: 13px; }
         .status-btn {
-          flex: 1;
-          padding: 8px 4px;
-          border-radius: 7px;
-          border: 1px solid var(--faint);
-          background: transparent;
-          color: var(--muted);
-          font-family: var(--mono);
-          font-size: 10px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.15s;
-          letter-spacing: 0.04em;
+          flex: 1; padding: 8px 4px; border-radius: 7px;
+          border: 1px solid var(--faint); background: transparent;
+          color: var(--muted); font-family: var(--mono); font-size: 10px;
+          font-weight: 700; cursor: pointer; transition: all 0.15s; letter-spacing: 0.04em;
         }
         .status-btn:hover { border-color: var(--blue); color: var(--blue); }
-        .status-btn.active-not_started { border-color: var(--muted);  color: var(--muted);  background: var(--surface2); }
-        .status-btn.active-in_progress { border-color: var(--blue);   color: var(--blue);   background: var(--blue-dim); }
-        .status-btn.active-done        { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
+        .status-btn.active-not_started { border-color: var(--muted); color: var(--muted); background: var(--surface2); }
+        .status-btn.active-in_progress { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
+        .status-btn.active-done { border-color: var(--green); color: var(--green); background: var(--green-dim); }
 
         .site-footer {
-          text-align: center;
-          padding: 20px;
-          font-family: var(--mono);
-          font-size: 10px;
-          color: var(--faint);
-          border-top: 1px solid var(--border);
-          margin-top: 40px;
+          text-align: center; padding: 20px;
+          font-family: var(--mono); font-size: 10px; color: var(--faint);
+          border-top: 1px solid var(--border); margin-top: 40px;
         }
         .site-footer a { color: var(--cyan); text-decoration: none; }
+
+        .auth-bar {
+          display: flex; gap: 10px; justify-content: center;
+          align-items: center; flex-wrap: wrap; margin-bottom: 8px;
+        }
+        .auth-btn {
+          display: flex; align-items: center; gap: 6px;
+          font-family: var(--mono); font-size: 10px; font-weight: 700;
+          padding: 6px 14px; border-radius: 7px; cursor: pointer;
+          transition: all 0.15s; letter-spacing: 0.04em;
+        }
+        .auth-btn-github {
+          background: #161b22; border: 1px solid #30363d; color: #e6edf3;
+        }
+        .auth-btn-github:hover { border-color: var(--cyan); color: var(--cyan); }
+        .auth-btn-signout {
+          background: transparent; border: 1px solid var(--faint); color: var(--muted);
+        }
+        .auth-btn-signout:hover { border-color: #f87171; color: #f87171; }
+        .sync-indicator {
+          font-family: var(--mono); font-size: 10px;
+        }
 
         @media (max-width: 500px) {
           .site-header { padding: 24px 16px 20px; }
@@ -473,7 +490,7 @@ export default function AIDevOpsTracker() {
             </div>
             <div className="progress-right">
               <div className="block-bar">
-                {blockBar.map((filled, i) => 
+                {blockBar.map((filled, i) =>
                   filled ? '█' : <span key={i} className="empty">░</span>
                 )}
               </div>
@@ -510,8 +527,8 @@ export default function AIDevOpsTracker() {
                                  : 'done ✓';
 
                   return (
-                    <div 
-                      key={step.id} 
+                    <div
+                      key={step.id}
                       className={`step-card ${status} ${isOpen ? 'open' : ''}`}
                     >
                       <div
@@ -581,10 +598,39 @@ export default function AIDevOpsTracker() {
       </main>
 
       <footer className="site-footer">
-        progress saved locally in your browser &nbsp;·&nbsp;
-        <a href="https://www.youtube.com/watch?v=Yb-asGyMM8A" target="_blank" rel="noopener noreferrer">
-          source: Abhishek Veeramalla
-        </a>
+        <div className="auth-bar">
+          {!supabase ? (
+            <span style={{ color: 'var(--muted)' }}>⚠ add supabase env vars to enable sync</span>
+          ) : user ? (
+            <>
+              <span className="sync-indicator" style={{
+                color: syncStatus === 'saved' ? 'var(--green)' :
+                       syncStatus === 'syncing' ? 'var(--blue)' :
+                       syncStatus === 'error' ? '#f87171' : 'var(--muted)',
+              }}>
+                {syncStatus === 'saved' ? '✓ synced' :
+                 syncStatus === 'syncing' ? '⟳ syncing…' :
+                 syncStatus === 'error' ? '✗ sync error' : '◌ connected'}
+              </span>
+              <span style={{ color: 'var(--faint)' }}>·</span>
+              <span style={{ color: 'var(--muted)' }}>{user.user_metadata?.user_name ?? user.email}</span>
+              <span style={{ color: 'var(--faint)' }}>·</span>
+              <button className="auth-btn auth-btn-signout" onClick={signOut}>sign out</button>
+            </>
+          ) : (
+            <button className="auth-btn auth-btn-github" onClick={signIn} disabled={authLoading}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/>
+              </svg>
+              {authLoading ? 'redirecting…' : 'sign in with github'}
+            </button>
+          )}
+        </div>
+        <div>
+          <a href="https://www.youtube.com/watch?v=Yb-asGyMM8A" target="_blank" rel="noopener noreferrer">
+            source: Abhishek Veeramalla
+          </a>
+        </div>
       </footer>
     </>
   );
