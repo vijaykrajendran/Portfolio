@@ -156,7 +156,9 @@ export default function AIDevOpsTracker() {
       try {
         const saved = localStorage.getItem(LOCAL_KEY);
         if (saved) setProgress(JSON.parse(saved));
-      } catch (e) {}
+      } catch (e) {
+        // Ignore localStorage errors
+      }
       setLoaded(true);
       return;
     }
@@ -165,7 +167,9 @@ export default function AIDevOpsTracker() {
     try {
       const saved = localStorage.getItem(LOCAL_KEY);
       if (saved) setProgress(JSON.parse(saved));
-    } catch (e) {}
+    } catch (e) {
+      // Ignore localStorage errors
+    }
 
     // Get current session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -216,7 +220,11 @@ export default function AIDevOpsTracker() {
   const save = async (next) => {
     setProgress(next);
     // Always write localStorage instantly
-    try { localStorage.setItem(LOCAL_KEY, JSON.stringify(next)); } catch (e) {}
+    try {
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(next));
+    } catch (e) {
+      // Ignore localStorage errors
+    }
 
     if (!supabase || !user) return;
 
