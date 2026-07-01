@@ -36,12 +36,12 @@ export const projects: Project[] = [
     title: 'HyperTrade',
     slug: 'hypertrade',
     banner: '/static/projects/hypertrade/banner.png',
-    website: 'https://github.com/karanpratapsingh/HyperTrade',
+    website: 'https://github.com/vijayrajendran/HyperTrade',
     description:
       'Ready to deploy, distributed cryptocurrency trading bot. The idea of this project originally came from a script I used to automate buying and selling of fiat assets. I was curious and wanted to scale it into a real system which can execute trades for me. I had a lot of fun building this. I got to play with lots of different technologies while growing my financial knowledge.',
     shortDescription:
       'Ready to deploy, distributed cryptocurrency trading bot.',
-    repository: 'https://github.com/karanpratapsingh/HyperTrade',
+    repository: 'https://github.com/vijayrajendran/HyperTrade',
     stack: [
       Stack.nats,
       Stack.go,
@@ -62,7 +62,7 @@ export const projects: Project[] = [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fhypertrade%2Ftelegram.png?alt=media&token=110874dd-fb96-4dd2-b299-12a62b092a04',
     ],
     deployment: {
-      web: 'https://github.com/karanpratapsingh/HyperTrade',
+      web: 'https://github.com/vijayrajendran/HyperTrade',
     },
     subProjects: [],
   },
@@ -96,7 +96,7 @@ export const projects: Project[] = [
     banner: '/static/projects/proximity/banner.jpeg',
     description:
       'An open source social media app that does not use your data against you.',
-    repository: 'https://github.com/karanpratapsingh/Proximity',
+    repository: 'https://github.com/vijayrajendran/Proximity',
     stack: [
       Stack.typescript,
       Stack.reactnative,
@@ -244,7 +244,7 @@ export const projects: Project[] = [
     banner: '/static/projects/kcards/banner.jpeg',
     description:
       'KCards is your one-stop replacement for paper cards. KCards help you to easily share your cards with other users and get real-time analytics on the shared cards.',
-    repository: 'https://github.com/karanpratapsingh/KCards',
+    repository: 'https://github.com/vijayrajendran/KCards',
     stack: [Stack.react, Stack.reactnative, Stack.node, Stack.mongo],
     dimensions: [450, 270],
     screenshots: [

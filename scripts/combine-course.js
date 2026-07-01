@@ -92,13 +92,13 @@ function printTOC(slug, topics) {
 function transformBody(course_slug, body) {
   body = body.replace(
     /\]\(\/static\/courses/g,
-    '](https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses',
+    '](https://raw.githubusercontent.com/vijayrajendran/portfolio/master/public/static/courses',
   );
 
   // Replace static links
   body = body.replace(
     new RegExp(`]\\(/courses/${course_slug}`, 'g'),
-    `](https://karanpratapsingh.com/courses/${course_slug}`,
+    `](https://vijayrajendran.com/courses/${course_slug}`,
   );
 
   return body;
