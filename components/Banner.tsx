@@ -3,6 +3,7 @@ import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import { memo } from 'react';
 import { RoughNotation } from 'react-rough-notation';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
+import { TypeAnimation } from 'react-type-animation';
 
 interface BannerProps {
   frontMatter: AuthorFrontMatter;
@@ -13,20 +14,36 @@ function Banner(props: BannerProps): React.ReactElement {
   const [aboutColor, contactColor] = useRandomColorPair();
 
   return (
-   // <div className='fade-in  flex flex-2 flex-col justify-center px-2 py-6 dark:text-white lg:px-10'>
-   // <div className='fade-in flex flex-3 flex-col justify-bottom items-center px-2 py-6 dark:text-white lg:px-10'>
-   //   <h1 className='text-3xl font-bold dark:text-white lg:text-5xl'>
-   //<div className='fade-in flex items-center justify-center h-screen'>
-      <div className='fade-in flex flex-3 flex-col justify-center items-center px-2 py-6 dark:text-white lg:px-10 '>
-        <h1 className='text-3xl font-bold dark:text-white lg:text-5xl'>
-        Hola, I am {frontMatter.shortname}
+      <div className='fade-in flex flex-col justify-center items-center px-4 py-8 sm:py-12 dark:text-white lg:px-10'>
+        <h1 className='text-3xl sm:text-4xl font-bold dark:text-white lg:text-5xl text-center'>
+          Hola, I am{' '}
+          <span className='bg-gradient-to-r from-primary-500 to-purple-500 bg-clip-text text-transparent'>
+            {frontMatter.shortname}
+          </span>
       </h1>
-      <p className='my-2 text-lg lg:my-4 lg:text-2xl'>
-        {frontMatter.occupation}
-      </p>
-      <p className='font-light lg:text-xl'>
+      <div className='my-2 text-lg lg:my-4 lg:text-2xl text-gray-600 dark:text-gray-300 h-8'>
+        <TypeAnimation
+          sequence={[
+            'Sr. DevOps Engineer',
+            2000,
+            'Kubernetes Expert',
+            2000,
+            'Cloud Architect',
+            2000,
+            'KubeAstronaut 🚀',
+            2000,
+            'CI/CD Specialist',
+            2000,
+          ]}
+          wrapper="span"
+          speed={50}
+          repeat={Infinity}
+          className="font-medium"
+        />
+      </div>
+      <p className='font-light lg:text-xl text-center'>
         Read more
-        <Link className='ml-4 mr-4 font-normal text-black' href='/about'>
+        <Link className='ml-3 mr-3 font-normal text-black dark:text-white btn-press' href='/about'>
           <RoughNotation
             show
             type='highlight'
@@ -38,7 +55,7 @@ function Banner(props: BannerProps): React.ReactElement {
           </RoughNotation>
         </Link>
         or
-        <Link className='ml-2 font-normal text-black' href='/contact'>
+        <Link className='ml-2 font-normal text-black dark:text-white btn-press' href='/contact'>
           <RoughNotation
             show
             type='highlight'
@@ -51,9 +68,9 @@ function Banner(props: BannerProps): React.ReactElement {
         </Link>
       </p>
 
-      <p className='my-3 text-lg lg:my-2 lg:text-1xl'>
+      <p className='my-4 text-lg lg:my-3 lg:text-xl'>
         Checkout my latest
-        <Link className='ml-4 mr-4 font-normal text-red' href='/blog'>
+        <Link className='ml-3 mr-3 font-normal text-black dark:text-white btn-press' href='/blog'>
           <RoughNotation
             show
             type='circle'
@@ -66,7 +83,6 @@ function Banner(props: BannerProps): React.ReactElement {
         </Link>
       </p>
     </div>
-  //</div>
   );
 }
 

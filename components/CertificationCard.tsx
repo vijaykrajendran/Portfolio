@@ -17,17 +17,17 @@ function CertificationCard({ certification }: CertificationCardProps): React.Rea
   };
 
   return (
-    <div className="group relative rounded-lg sm:rounded-xl border border-gray-200 bg-white p-3 sm:p-4 transition-all duration-200 hover:border-primary-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-primary-500">
+    <div className="card-hover group relative rounded-lg sm:rounded-xl border border-gray-200 bg-white p-3 sm:p-4 hover:border-primary-400 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-primary-500">
       <div className="flex items-start gap-3 sm:gap-4">
         {/* Badge Image - Compact */}
         <div className="flex-shrink-0">
-          <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-800">
+          <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-800 group-hover:bg-gray-100 dark:group-hover:bg-gray-700 transition-colors duration-200">
             <Image
               src={badge}
               alt={title}
               width={56}
               height={56}
-              className="object-contain"
+              className="object-contain group-hover:scale-110 transition-transform duration-300"
             />
           </div>
         </div>
@@ -71,7 +71,7 @@ function CertificationCard({ certification }: CertificationCardProps): React.Rea
           <div className="flex-shrink-0 self-center">
             <Link
               href={credentialUrl}
-              className="inline-flex items-center justify-center rounded-lg bg-primary-500 p-2 sm:px-3 sm:py-1.5 text-white transition-colors hover:bg-primary-600"
+              className="btn-press inline-flex items-center justify-center rounded-lg bg-primary-500 p-2 sm:px-3 sm:py-1.5 text-white transition-all duration-200 hover:bg-primary-600 hover:shadow-lg hover:shadow-primary-500/25"
               target="_blank"
               rel="noopener noreferrer"
               title="Verify credential"

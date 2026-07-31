@@ -83,7 +83,7 @@ function KubeAstronaut({ awardDate, credentialUrl, badge, certifications }: Kube
               {credentialUrl && (
                 <Link
                   href={credentialUrl}
-                  className="inline-flex items-center rounded-lg bg-purple-600 hover:bg-purple-500 px-4 py-2 text-xs sm:text-sm font-medium text-white transition-colors"
+                  className="btn-press inline-flex items-center rounded-lg bg-purple-600 hover:bg-purple-500 px-4 py-2 text-xs sm:text-sm font-medium text-white transition-all duration-200 hover:shadow-lg hover:shadow-purple-500/30"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

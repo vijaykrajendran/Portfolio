@@ -5,6 +5,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 import KubeAstronautBadge from '@/components/KubeAstronautBadge';
+import TechStack from '@/components/TechStack';
+import Timeline from '@/components/Timeline';
 import { kubeAstronautStatus } from 'config/certifications';
 
 // TODO: Direct share functionality.
@@ -35,6 +37,8 @@ export default function Home({
         description={siteMetadata.description}
       />
       <Banner frontMatter={author} />
+      
+      {/* KubeAstronaut Badge */}
       {kubeAstronautStatus.isKubeAstronaut && (
         <div className="mx-auto max-w-md px-4 py-4 sm:py-6">
           <KubeAstronautBadge
@@ -43,6 +47,12 @@ export default function Home({
           />
         </div>
       )}
+
+      {/* Tech Stack Showcase */}
+      <TechStack />
+
+      {/* Experience Timeline */}
+      <Timeline />
     </>
   );
 }
