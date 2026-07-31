@@ -7,7 +7,7 @@ interface CertificationCardProps {
 }
 
 function CertificationCard({ certification }: CertificationCardProps): React.ReactElement {
-  const { title, issuer, issueDate, expiryDate, badge, credentialUrl, skills } = certification;
+  const { title, issuer, issueDate, badge, credentialUrl, skills } = certification;
   
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('en-US', {
@@ -16,83 +16,70 @@ function CertificationCard({ certification }: CertificationCardProps): React.Rea
     });
   };
 
-  const isExpired = expiryDate && new Date(expiryDate) < new Date();
-  const isExpiringSoon = expiryDate && !isExpired && 
-    new Date(expiryDate) < new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
-
   return (
-    <div className="group relative rounded-xl border-2 border-gray-100 bg-white p-6 transition-all duration-300 hover:border-primary-500 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900 dark:hover:border-primary-400">
-      <div className="flex flex-col items-center sm:flex-row sm:items-start gap-4">
-        {/* Badge Image */}
+    <div className="group relative rounded-lg sm:rounded-xl border border-gray-200 bg-white p-3 sm:p-4 transition-all duration-200 hover:border-primary-400 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-primary-500">
+      <div className="flex items-start gap-3 sm:gap-4">
+        {/* Badge Image - Compact */}
         <div className="flex-shrink-0">
-          <div className="relative h-24 w-24 overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-800">
+          <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-800">
             <Image
               src={badge}
               alt={title}
-              layout="fill"
-              objectFit="contain"
-              className="p-2"
+              width={56}
+              height={56}
+              className="object-contain"
             />
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 text-center sm:text-left">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white truncate">
             {title}
           </h3>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
             {issuer}
           </p>
           
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-            <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200">
-              Issued: {formatDate(issueDate)}
+          {/* Issue date */}
+          <div className="mt-1.5">
+            <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
+              Issued {formatDate(issueDate)}
             </span>
-            {expiryDate && (
-              <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                isExpired 
-                  ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                  : isExpiringSoon
-                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                  : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-              }`}>
-                {isExpired ? 'Expired' : 'Expires'}: {formatDate(expiryDate)}
-              </span>
-            )}
           </div>
 
-          {/* Skills Tags */}
-          <div className="mt-3 flex flex-wrap justify-center gap-1 sm:justify-start">
-            {skills.slice(0, 4).map((skill) => (
+          {/* Skills - Hidden on mobile, shown on sm+ */}
+          <div className="mt-2 hidden sm:flex flex-wrap gap-1">
+            {skills.slice(0, 3).map((skill) => (
               <span
                 key={skill}
-                className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                className="inline-flex items-center rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600 dark:bg-gray-800 dark:text-gray-400"
               >
                 {skill}
               </span>
             ))}
-            {skills.length > 4 && (
-              <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-                +{skills.length - 4} more
+            {skills.length > 3 && (
+              <span className="inline-flex items-center rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-500 dark:bg-gray-800 dark:text-gray-500">
+                +{skills.length - 3}
               </span>
             )}
           </div>
         </div>
 
-        {/* Verify Button */}
+        {/* Verify Button - Icon only on mobile */}
         {credentialUrl && (
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 self-center">
             <Link
               href={credentialUrl}
-              className="inline-flex items-center rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
+              className="inline-flex items-center justify-center rounded-lg bg-primary-500 p-2 sm:px-3 sm:py-1.5 text-white transition-colors hover:bg-primary-600"
               target="_blank"
               rel="noopener noreferrer"
+              title="Verify credential"
             >
-              <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              Verify
+              <span className="hidden sm:inline ml-1.5 text-xs font-medium">Verify</span>
             </Link>
           </div>
         )}

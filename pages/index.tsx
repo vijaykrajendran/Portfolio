@@ -4,7 +4,7 @@ import { getFileBySlug } from '@/lib/mdx';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
-import KubeAstronaut from '@/components/KubeAstronaut';
+import KubeAstronautBadge from '@/components/KubeAstronautBadge';
 import { kubeAstronautStatus } from 'config/certifications';
 
 // TODO: Direct share functionality.
@@ -36,12 +36,10 @@ export default function Home({
       />
       <Banner frontMatter={author} />
       {kubeAstronautStatus.isKubeAstronaut && (
-        <div className="container py-6">
-          <KubeAstronaut
-            awardDate={kubeAstronautStatus.awardDate}
-            credentialUrl={kubeAstronautStatus.credentialUrl}
+        <div className="mx-auto max-w-md px-4 py-4 sm:py-6">
+          <KubeAstronautBadge
             badge={kubeAstronautStatus.badge}
-            certifications={kubeAstronautStatus.certifications}
+            certificationCount={kubeAstronautStatus.certifications.length}
           />
         </div>
       )}
