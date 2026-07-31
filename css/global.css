@@ -25,6 +25,136 @@ html {
   }
 }
 
+/* Walking Character Animation */
+.walking-character-container {
+  position: absolute;
+  top: -45px;
+  left: 0;
+  right: 0;
+  height: 50px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.walking-character {
+  position: absolute;
+  animation: walk-across 6s ease-in-out infinite;
+  width: 35px;
+  height: 50px;
+}
+
+.character-svg {
+  width: 35px;
+  height: 50px;
+}
+
+/* Speech bubble */
+.speech-bubble {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #333;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  animation: bubble-pop 6s ease-in-out infinite;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #fff;
+}
+
+/* Walking animation - walks across "Hola" */
+@keyframes walk-across {
+  0% {
+    left: -20px;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  50% {
+    left: calc(100% - 20px);
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% + 20px);
+    opacity: 0;
+  }
+}
+
+/* Waving arm animation */
+.waving-arm {
+  animation: arm-wave 0.5s ease-in-out infinite;
+  transform-origin: 18px 26px;
+}
+
+@keyframes arm-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(20deg); }
+}
+
+/* Walking legs animation */
+.left-leg {
+  animation: leg-walk-left 0.3s ease-in-out infinite;
+  transform-origin: 21px 42px;
+}
+
+.right-leg {
+  animation: leg-walk-right 0.3s ease-in-out infinite;
+  transform-origin: 28px 42px;
+}
+
+.left-foot {
+  animation: leg-walk-left 0.3s ease-in-out infinite;
+}
+
+.right-foot {
+  animation: leg-walk-right 0.3s ease-in-out infinite;
+}
+
+@keyframes leg-walk-left {
+  0%, 100% { transform: rotate(-15deg); }
+  50% { transform: rotate(15deg); }
+}
+
+@keyframes leg-walk-right {
+  0%, 100% { transform: rotate(15deg); }
+  50% { transform: rotate(-15deg); }
+}
+
+/* Speech bubble pop in/out */
+@keyframes bubble-pop {
+  0%, 10% { opacity: 0; transform: translateX(-50%) scale(0); }
+  20%, 80% { opacity: 1; transform: translateX(-50%) scale(1); }
+  90%, 100% { opacity: 0; transform: translateX(-50%) scale(0); }
+}
+
+/* Character bounce while walking */
+.walking-character {
+  animation: walk-across 6s ease-in-out infinite, bounce 0.3s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
 /* Staggered animations for lists */
 .stagger-item {
   opacity: 0;
