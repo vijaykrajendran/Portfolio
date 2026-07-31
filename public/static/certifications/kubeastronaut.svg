@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="astro-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9C27B0"/>
+      <stop offset="50%" style="stop-color:#673AB7"/>
+      <stop offset="100%" style="stop-color:#3F51B5"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Outer glow ring -->
+  <circle cx="100" cy="100" r="95" fill="url(#astro-grad)" stroke="#fff" stroke-width="3"/>
+  <!-- Stars decoration -->
+  <circle cx="40" cy="50" r="3" fill="#FFD700" filter="url(#glow)"/>
+  <circle cx="160" cy="45" r="2" fill="#FFD700" filter="url(#glow)"/>
+  <circle cx="155" cy="150" r="2.5" fill="#FFD700" filter="url(#glow)"/>
+  <circle cx="45" cy="145" r="2" fill="#FFD700" filter="url(#glow)"/>
+  <circle cx="100" cy="30" r="2" fill="#FFD700" filter="url(#glow)"/>
+  <!-- Rocket icon -->
+  <text x="100" y="75" text-anchor="middle" font-size="35">🚀</text>
+  <!-- Text -->
+  <text x="100" y="115" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">KUBE</text>
+  <text x="100" y="135" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">ASTRONAUT</text>
+  <!-- Badge ribbon -->
+  <text x="100" y="160" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="10" font-weight="bold">★ ELITE ★</text>
+</svg>
