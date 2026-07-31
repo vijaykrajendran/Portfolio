@@ -40,13 +40,13 @@ function getBody(course_slug, slug) {
 
   body = body.replace(
     /\]\(\/static\/courses/g,
-    '](https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses',
+    '](https://raw.githubusercontent.com/vijayrajendran/portfolio/master/public/static/courses',
   );
 
   // Replace static links
   body = body.replace(
     new RegExp(`]\\(/courses/${course_slug}`, 'g'),
-    `](https://karanpratapsingh.com/courses/${course_slug}`,
+    `](https://vijayrajendran.com/courses/${course_slug}`,
   );
 
   // Add footer
@@ -54,7 +54,7 @@ function getBody(course_slug, slug) {
 
 ---
 
-_This article is part of my open-source [System Design Course](https://github.com/karanpratapsingh/system-design) available on Github._`;
+_This article is part of my open-source [System Design Course](https://github.com/vijayrajendran/system-design) available on Github._`;
 
   return body;
 }
@@ -110,7 +110,7 @@ function createDraft(apiKey, user_id, body) {
       'Architecture',
       'Software Engineering',
     ];
-    const canonicalUrl = `https://github.com/karanpratapsingh/${course_slug}#${slug}`;
+    const canonicalUrl = `https://github.com/vijayrajendran/${course_slug}#${slug}`;
     const content = getBody(course_slug, slug);
 
     const body = {

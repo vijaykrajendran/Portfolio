@@ -2,15 +2,19 @@ import CourseContent from '@/components/CourseContent';
 import { Header } from '@/components/Form';
 import { PageSEO } from '@/components/SEO';
 import config from 'config';
-import { InferGetStaticPropsType } from 'next';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 const SLUG = 'go';
 
-export function getStaticProps() {
-  const course = config.courses.find(course => course.slug === SLUG);
+export const getStaticProps: GetStaticProps = () => {
+  const course = config.courses.find(course => course.slug === SLUG) || null;
+
+  if (!course) {
+    return { notFound: true };
+  }
 
   return { props: { course } };
-}
+};
 
 export default function Go(
   props: InferGetStaticPropsType<typeof getStaticProps>,

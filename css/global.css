@@ -1,3 +1,13 @@
+/* Smooth scroll for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base transitions for interactive elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .fade-in {
   animation: fade-in ease 500ms;
   animation-iteration-count: 1;
@@ -7,10 +17,249 @@
 @keyframes fade-in {
   0% {
     opacity: 0;
+    transform: translateY(10px);
   }
   100% {
     opacity: 1;
+    transform: translateY(0);
   }
+}
+
+/* Walking Character Animation */
+.walking-character-container {
+  position: absolute;
+  top: -45px;
+  left: 0;
+  right: 0;
+  height: 50px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.walking-character {
+  position: absolute;
+  animation: walk-across 6s ease-in-out infinite;
+  width: 35px;
+  height: 50px;
+}
+
+.character-svg {
+  width: 35px;
+  height: 50px;
+}
+
+/* Speech bubble */
+.speech-bubble {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #333;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  animation: bubble-pop 6s ease-in-out infinite;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #fff;
+}
+
+/* Walking animation - walks across "Hola" */
+@keyframes walk-across {
+  0% {
+    left: -20px;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  50% {
+    left: calc(100% - 20px);
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% + 20px);
+    opacity: 0;
+  }
+}
+
+/* Waving arm animation */
+.waving-arm {
+  animation: arm-wave 0.5s ease-in-out infinite;
+  transform-origin: 18px 26px;
+}
+
+@keyframes arm-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(20deg); }
+}
+
+/* Walking legs animation */
+.left-leg {
+  animation: leg-walk-left 0.3s ease-in-out infinite;
+  transform-origin: 21px 42px;
+}
+
+.right-leg {
+  animation: leg-walk-right 0.3s ease-in-out infinite;
+  transform-origin: 28px 42px;
+}
+
+.left-foot {
+  animation: leg-walk-left 0.3s ease-in-out infinite;
+}
+
+.right-foot {
+  animation: leg-walk-right 0.3s ease-in-out infinite;
+}
+
+@keyframes leg-walk-left {
+  0%, 100% { transform: rotate(-15deg); }
+  50% { transform: rotate(15deg); }
+}
+
+@keyframes leg-walk-right {
+  0%, 100% { transform: rotate(15deg); }
+  50% { transform: rotate(-15deg); }
+}
+
+/* Speech bubble pop in/out */
+@keyframes bubble-pop {
+  0%, 10% { opacity: 0; transform: translateX(-50%) scale(0); }
+  20%, 80% { opacity: 1; transform: translateX(-50%) scale(1); }
+  90%, 100% { opacity: 0; transform: translateX(-50%) scale(0); }
+}
+
+/* Character bounce while walking */
+.walking-character {
+  animation: walk-across 6s ease-in-out infinite, bounce 0.3s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Staggered animations for lists */
+.stagger-item {
+  opacity: 0;
+  animation: stagger-in 0.4s ease forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.05s; }
+.stagger-item:nth-child(2) { animation-delay: 0.1s; }
+.stagger-item:nth-child(3) { animation-delay: 0.15s; }
+.stagger-item:nth-child(4) { animation-delay: 0.2s; }
+.stagger-item:nth-child(5) { animation-delay: 0.25s; }
+.stagger-item:nth-child(6) { animation-delay: 0.3s; }
+.stagger-item:nth-child(7) { animation-delay: 0.35s; }
+.stagger-item:nth-child(8) { animation-delay: 0.4s; }
+.stagger-item:nth-child(9) { animation-delay: 0.45s; }
+.stagger-item:nth-child(10) { animation-delay: 0.5s; }
+
+@keyframes stagger-in {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Premium card hover effect */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Glow animation for badges */
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(147, 51, 234, 0.3), 0 0 10px rgba(147, 51, 234, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(147, 51, 234, 0.5), 0 0 25px rgba(147, 51, 234, 0.3);
+  }
+}
+
+/* Button press effect */
+.btn-press {
+  transition: transform 0.1s ease;
+}
+
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Link underline animation */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* Subtle scale on hover */
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Image hover zoom */
+.img-zoom {
+  overflow: hidden;
+}
+
+.img-zoom img {
+  transition: transform 0.4s ease;
+}
+
+.img-zoom:hover img {
+  transform: scale(1.05);
 }
 
 .banner {
