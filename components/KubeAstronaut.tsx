@@ -54,8 +54,8 @@ function KubeAstronaut({ awardDate, credentialUrl, badge, certifications }: Kube
                 <Image
                   src={badge}
                   alt="KubeAstronaut Badge"
-                  fill
-                  className="object-contain"
+                  layout="fill"
+                  objectFit="contain"
                   priority
                 />
               </div>

@@ -29,8 +29,9 @@ function CertificationCard({ certification }: CertificationCardProps): React.Rea
             <Image
               src={badge}
               alt={title}
-              fill
-              className="object-contain p-2"
+              layout="fill"
+              objectFit="contain"
+              className="p-2"
             />
           </div>
         </div>

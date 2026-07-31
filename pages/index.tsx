@@ -4,6 +4,8 @@ import { getFileBySlug } from '@/lib/mdx';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
+import KubeAstronaut from '@/components/KubeAstronaut';
+import { kubeAstronautStatus } from 'config/certifications';
 
 // TODO: Direct share functionality.
 // TODO: Switch geist-ui with something simple.
@@ -33,6 +35,16 @@ export default function Home({
         description={siteMetadata.description}
       />
       <Banner frontMatter={author} />
+      {kubeAstronautStatus.isKubeAstronaut && (
+        <div className="container py-6">
+          <KubeAstronaut
+            awardDate={kubeAstronautStatus.awardDate}
+            credentialUrl={kubeAstronautStatus.credentialUrl}
+            badge={kubeAstronautStatus.badge}
+            certifications={kubeAstronautStatus.certifications}
+          />
+        </div>
+      )}
     </>
   );
 }
