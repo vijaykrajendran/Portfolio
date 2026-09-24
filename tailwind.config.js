@@ -26,13 +26,30 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
+        sans: ['Fira Code', ...defaultTheme.fontFamily.mono],
+        mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
+        body: ['Open Sans', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: colors.cyan,
+        primary: colors.emerald,
         gray: colors.neutral,
         'placeholder-light': '#F0F0F0',
         'placeholder-dark': '#252525',
+        // Terminal / DevOps palette
+        term: {
+          bg: '#0d1117', // GitHub-dark-like base
+          panel: '#161b22', // window body
+          titlebar: '#21262d', // window chrome
+          border: '#30363d',
+          text: '#c9d1d9',
+          dim: '#8b949e',
+          green: '#3fb950',
+          cyan: '#39c5cf',
+          blue: '#58a6ff',
+          amber: '#d29922',
+          red: '#f85149',
+          purple: '#bc8cff',
+        },
       },
       typography: theme => ({
         DEFAULT: {

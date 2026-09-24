@@ -5,7 +5,7 @@ const siteMetadata = {
   description:
     'A software engineer who aims to evolve, innovate, and inspire through technology.',
   language: 'en-us',
-  theme: 'system', // system, dark or light
+  theme: 'dark', // system, dark or light
   siteUrl: 'https://vijayrajendran.com',
   siteRepo: 'https://github.com/vijaykrajendran/portfolio',
   siteLogo: '/static/images/logo.png',

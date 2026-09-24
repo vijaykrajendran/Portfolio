@@ -1,5 +1,5 @@
 import headerNavLinks from '@/data/headerNavLinks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from './Link';
 
 const MobileNav = () => {
@@ -7,64 +7,66 @@ const MobileNav = () => {
 
   const onToggleNav = () => {
     setNavShow(status => {
-      if (status) {
-        document.body.style.overflow = 'auto';
-      } else {
-        document.body.style.overflow = 'hidden';
-      }
+      document.body.style.overflow = status ? 'auto' : 'hidden';
       return !status;
     });
   };
+
+  // Close on Escape for keyboard users
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && navShow) {
+        setNavShow(false);
+        document.body.style.overflow = 'auto';
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [navShow]);
 
   return (
     <div className='sm:hidden'>
       <button
         type='button'
-        className='ml-1 mr-1 h-8 w-8 rounded py-1'
-        aria-label='Toggle Menu'
+        className='ml-1 flex h-8 w-8 items-center justify-center rounded text-term-green'
+        aria-label='Toggle menu'
+        aria-expanded={navShow}
         onClick={onToggleNav}
       >
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          viewBox='0 0 20 20'
-          fill='currentColor'
-          className='text-gray-900 dark:text-gray-100'
-        >
-          {navShow ? (
-            <path
-              fillRule='evenodd'
-              d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-              clipRule='evenodd'
-            />
-          ) : (
-            <path
-              fillRule='evenodd'
-              d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
-              clipRule='evenodd'
-            />
-          )}
-        </svg>
+        <span className='font-mono text-lg leading-none'>
+          {navShow ? '✕' : '≡'}
+        </span>
       </button>
+
       <div
-        className={`fixed top-24 right-0 z-10 h-full w-full transform bg-white opacity-95 duration-300 ease-in-out dark:bg-gray-900 ${
+        className={`fixed inset-0 z-40 transform bg-term-bg/95 backdrop-blur duration-300 ease-in-out ${
           navShow ? 'translate-x-0' : 'translate-x-full'
         }`}
+        role='dialog'
+        aria-modal='true'
+        aria-hidden={!navShow}
       >
-        <button
-          type='button'
-          aria-label='toggle modal'
-          className='fixed h-full w-full cursor-auto focus:outline-none'
-          onClick={onToggleNav}
-        ></button>
-        <nav className='fixed mt-8 h-full'>
+        <div className='flex items-center justify-between border-b border-term-border px-6 py-4'>
+          <span className='font-mono text-xs text-term-dim'>~/nav $ ls</span>
+          <button
+            type='button'
+            aria-label='Close menu'
+            className='font-mono text-lg text-term-red'
+            onClick={onToggleNav}
+          >
+            ✕
+          </button>
+        </div>
+        <nav className='mt-4 px-6'>
           {headerNavLinks.map(link => (
-            <div key={link.title} className='px-12 py-4'>
+            <div key={link.title} className='py-3'>
               <Link
                 href={link.href}
-                className='text-2xl font-bold tracking-widest text-gray-900 dark:text-gray-100'
+                className='font-mono text-lg text-term-text'
                 onClick={onToggleNav}
               >
-                {link.title}
+                <span className='text-term-green'>▸</span>{' '}
+                {link.title.toLowerCase().replace(/\s+/g, '-')}
               </Link>
             </div>
           ))}

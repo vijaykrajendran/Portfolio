@@ -61,7 +61,7 @@ html {
   font-size: 10px;
   font-weight: bold;
   white-space: nowrap;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   animation: bubble-pop 6s ease-in-out infinite;
 }
 
@@ -104,9 +104,16 @@ html {
 }
 
 @keyframes arm-wave {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-20deg); }
-  75% { transform: rotate(20deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-20deg);
+  }
+  75% {
+    transform: rotate(20deg);
+  }
 }
 
 /* Walking legs animation */
@@ -129,30 +136,59 @@ html {
 }
 
 @keyframes leg-walk-left {
-  0%, 100% { transform: rotate(-15deg); }
-  50% { transform: rotate(15deg); }
+  0%,
+  100% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
 }
 
 @keyframes leg-walk-right {
-  0%, 100% { transform: rotate(15deg); }
-  50% { transform: rotate(-15deg); }
+  0%,
+  100% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
 }
 
 /* Speech bubble pop in/out */
 @keyframes bubble-pop {
-  0%, 10% { opacity: 0; transform: translateX(-50%) scale(0); }
-  20%, 80% { opacity: 1; transform: translateX(-50%) scale(1); }
-  90%, 100% { opacity: 0; transform: translateX(-50%) scale(0); }
+  0%,
+  10% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0);
+  }
+  20%,
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0);
+  }
 }
 
 /* Character bounce while walking */
 .walking-character {
-  animation: walk-across 6s ease-in-out infinite, bounce 0.3s ease-in-out infinite;
+  animation:
+    walk-across 6s ease-in-out infinite,
+    bounce 0.3s ease-in-out infinite;
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 /* Staggered animations for lists */
@@ -161,16 +197,36 @@ html {
   animation: stagger-in 0.4s ease forwards;
 }
 
-.stagger-item:nth-child(1) { animation-delay: 0.05s; }
-.stagger-item:nth-child(2) { animation-delay: 0.1s; }
-.stagger-item:nth-child(3) { animation-delay: 0.15s; }
-.stagger-item:nth-child(4) { animation-delay: 0.2s; }
-.stagger-item:nth-child(5) { animation-delay: 0.25s; }
-.stagger-item:nth-child(6) { animation-delay: 0.3s; }
-.stagger-item:nth-child(7) { animation-delay: 0.35s; }
-.stagger-item:nth-child(8) { animation-delay: 0.4s; }
-.stagger-item:nth-child(9) { animation-delay: 0.45s; }
-.stagger-item:nth-child(10) { animation-delay: 0.5s; }
+.stagger-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.stagger-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.stagger-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.stagger-item:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.stagger-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.stagger-item:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.stagger-item:nth-child(7) {
+  animation-delay: 0.35s;
+}
+.stagger-item:nth-child(8) {
+  animation-delay: 0.4s;
+}
+.stagger-item:nth-child(9) {
+  animation-delay: 0.45s;
+}
+.stagger-item:nth-child(10) {
+  animation-delay: 0.5s;
+}
 
 @keyframes stagger-in {
   0% {
@@ -190,11 +246,15 @@ html {
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .dark .card-hover:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
 /* Glow animation for badges */
@@ -203,11 +263,16 @@ html {
 }
 
 @keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(147, 51, 234, 0.3), 0 0 10px rgba(147, 51, 234, 0.2);
+  0%,
+  100% {
+    box-shadow:
+      0 0 5px rgba(147, 51, 234, 0.3),
+      0 0 10px rgba(147, 51, 234, 0.2);
   }
   50% {
-    box-shadow: 0 0 15px rgba(147, 51, 234, 0.5), 0 0 25px rgba(147, 51, 234, 0.3);
+    box-shadow:
+      0 0 15px rgba(147, 51, 234, 0.5),
+      0 0 25px rgba(147, 51, 234, 0.3);
   }
 }
 
@@ -260,6 +325,154 @@ html {
 
 .img-zoom:hover img {
   transform: scale(1.05);
+}
+
+/* ============================================================
+   TERMINAL / DEVOPS DESIGN SYSTEM
+   ============================================================ */
+
+/* Terminal window chrome */
+.terminal-window {
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  background: #161b22;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+.terminal-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  background: #21262d;
+  border-bottom: 1px solid #30363d;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  display: inline-block;
+}
+.terminal-dot.red {
+  background: #ff5f56;
+}
+.terminal-dot.amber {
+  background: #ffbd2e;
+}
+.terminal-dot.green {
+  background: #27c93f;
+}
+
+.terminal-title {
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+  color: #8b949e;
+  font-family: 'Fira Code', monospace;
+}
+
+.terminal-body {
+  padding: 1rem 1.1rem;
+  font-family: 'Fira Code', monospace;
+  color: #c9d1d9;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* Shell prompt */
+.term-prompt::before {
+  content: '$';
+  color: #3fb950;
+  margin-right: 0.6rem;
+  font-weight: 700;
+}
+.term-prompt-user {
+  color: #3fb950;
+}
+.term-prompt-path {
+  color: #58a6ff;
+}
+.term-comment {
+  color: #8b949e;
+}
+
+/* Blinking cursor */
+.term-cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  background: #3fb950;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: term-blink 1s steps(2, start) infinite;
+}
+
+@keyframes term-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* Subtle terminal grid background */
+.term-grid-bg {
+  background-color: #0d1117;
+  background-image:
+    linear-gradient(rgba(63, 185, 80, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(63, 185, 80, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Terminal card */
+.term-card {
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  background: #161b22;
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.term-card:hover {
+  border-color: #3fb950;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -12px rgba(63, 185, 80, 0.35);
+}
+
+/* Tag/chip */
+.term-chip {
+  font-family: 'Fira Code', monospace;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #c9d1d9;
+  background: #0d1117;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+.term-chip:hover {
+  border-color: #39c5cf;
+  color: #39c5cf;
+}
+
+/* Nav link as command */
+.term-navlink {
+  color: #8b949e;
+  transition: color 0.2s ease;
+}
+.term-navlink:hover {
+  color: #3fb950;
+}
+.term-navlink.active {
+  color: #3fb950;
+}
+
+/* Typing caret used by hero */
+.typing-caret::after {
+  content: '▋';
+  color: #3fb950;
+  animation: term-blink 1s steps(2, start) infinite;
+  margin-left: 2px;
 }
 
 .banner {
