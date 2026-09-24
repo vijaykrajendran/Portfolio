@@ -3,23 +3,25 @@ import { PageSEO } from '@/components/SEO';
 import siteMetadata from '@/data/siteMetadata';
 import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import { contact } from 'config/contact';
-import { openPopupWidget } from 'react-calendly';
+import { useEffect, useState } from 'react';
+import { PopupModal } from 'react-calendly';
 import { RoughNotation } from 'react-rough-notation';
 
 function Contact(): React.ReactElement {
   const [randomColor] = useRandomColorPair();
+  const [isOpen, setIsOpen] = useState(false);
+  const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setRootElement(document.body);
+  }, []);
 
   function onScheduleMeeting(): void {
     if (!contact.calendly) {
       console.error('err: calendly link was not provided.');
       return;
     }
-
-    const config = {
-      url: contact.calendly,
-    };
-
-    openPopupWidget(config);
+    setIsOpen(true);
   }
 
   return (
@@ -54,6 +56,14 @@ function Contact(): React.ReactElement {
           </p>
         </div>
       </div>
+      {contact.calendly && rootElement && (
+        <PopupModal
+          url={contact.calendly}
+          open={isOpen}
+          onModalClose={() => setIsOpen(false)}
+          rootElement={rootElement}
+        />
+      )}
     </>
   );
 }
