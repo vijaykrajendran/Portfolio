@@ -58,17 +58,38 @@ const MobileNav = () => {
           </button>
         </div>
         <nav className='mt-6 px-6'>
-          {headerNavLinks.map(link => (
-            <div key={link.title} className='py-3'>
-              <Link
-                href={link.href}
-                className='text-xl font-semibold text-term-text hover:text-term-green'
-                onClick={onToggleNav}
-              >
-                {link.title}
-              </Link>
-            </div>
-          ))}
+          {headerNavLinks.map(link =>
+            link.children ? (
+              <div key={link.title} className='py-3'>
+                <span className='font-mono text-xs uppercase tracking-wider text-term-dim'>
+                  {link.title}
+                </span>
+                <div className='mt-2 space-y-2 border-l border-term-border/60 pl-4'>
+                  {link.children.map(child => (
+                    <div key={child.title}>
+                      <Link
+                        href={child.href}
+                        className='text-lg font-semibold text-term-text hover:text-term-green'
+                        onClick={onToggleNav}
+                      >
+                        {child.title}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div key={link.title} className='py-3'>
+                <Link
+                  href={link.href}
+                  className='text-xl font-semibold text-term-text hover:text-term-green'
+                  onClick={onToggleNav}
+                >
+                  {link.title}
+                </Link>
+              </div>
+            ),
+          )}
         </nav>
       </div>
     </div>
