@@ -2,6 +2,7 @@ import { Header } from '@/components/Form';
 import Link from '@/components/Link';
 import Pagination from '@/components/Pagination';
 import Tag from '@/components/Tag';
+import Reveal from '@/components/motion/Reveal';
 import formatDate from '@/lib/utils/formatDate';
 import { ComponentProps, useState } from 'react';
 import { BsFilterLeft as FilterIcon } from 'react-icons/bs';
@@ -35,75 +36,70 @@ export default function ListLayout({
 
   return (
     <>
-      <div className='fade-in divide-y-2 divide-gray-100 dark:divide-gray-800'>
+      <div className='fade-in divide-y-2 divide-term-border/60'>
         <Header title={title}>
           <div className='relative max-w-lg'>
+            <span className='pointer-events-none absolute left-3 top-2.5 font-mono text-sm text-term-green'>
+              $
+            </span>
             <input
               aria-label='Search articles'
               type='text'
               onChange={({ target }) => setSearchValue(target.value)}
-              placeholder='Search articles'
-              className='block w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100'
+              placeholder='grep posts...'
+              className='block w-full rounded-md border border-term-border bg-term-bg/60 py-2 pl-8 pr-16 font-mono text-sm text-term-text placeholder:text-term-dim focus:border-term-green focus:outline-none focus:ring-1 focus:ring-term-green'
             />
-            <svg
-              className='absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-              />
-            </svg>
             <Link
               href='/tags'
-              className='absolute right-10 top-2 text-gray-400 dark:text-gray-300'
+              aria-label='Browse tags'
+              className='absolute right-3 top-2 text-term-dim hover:text-term-green'
             >
-              <FilterIcon size={30} />
+              <FilterIcon size={26} />
             </Link>
           </div>
         </Header>
 
-        <ul>
+        <ul className='divide-y divide-term-border/40'>
           {!filteredBlogPosts.length && (
-            <p className='mt-8 text-center'>No posts found</p>
+            <p className='mt-8 text-center font-mono text-sm text-term-dim'>
+              {'// no posts found'}
+            </p>
           )}
-          {displayPosts.map(frontMatter => {
+          {displayPosts.map((frontMatter, i) => {
             const { slug, date, title, summary, tags } = frontMatter;
             return (
               <li key={slug} className='py-4'>
-                <article className='space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0'>
-                  <dl>
-                    <dt className='sr-only'>Published on</dt>
-                    <dd className='text-base font-medium leading-6 text-gray-500 dark:text-gray-400'>
-                      <time dateTime={date}>{formatDate(date)}</time>
-                    </dd>
-                  </dl>
-                  <div className='space-y-3 xl:col-span-3'>
-                    <div>
-                      <h3 className='text-2xl font-bold leading-8 tracking-tight'>
-                        <Link
-                          href={`/blog/${slug}`}
-                          className='text-gray-900 dark:text-gray-100'
-                        >
+                <Reveal delay={Math.min(i * 0.06, 0.3)}>
+                  <Link
+                    href={`/blog/${slug}`}
+                    className='motion-card group block p-5 no-underline'
+                  >
+                    <div className='flex flex-col gap-2 xl:flex-row xl:items-baseline xl:gap-6'>
+                      <time
+                        dateTime={date}
+                        className='shrink-0 font-mono text-xs text-term-green xl:w-32'
+                      >
+                        {formatDate(date)}
+                      </time>
+                      <div className='flex-1 space-y-2'>
+                        <h3 className='text-xl font-bold leading-7 tracking-tight text-term-text group-hover:text-term-green'>
                           {title}
-                        </Link>
-                      </h3>
-                      <div className='flex flex-wrap'>
-                        {tags.map(tag => (
-                          <Tag key={tag} text={tag} />
-                        ))}
+                        </h3>
+                        <div className='flex flex-wrap gap-1'>
+                          {tags.map(tag => (
+                            <Tag key={tag} text={tag} />
+                          ))}
+                        </div>
+                        <p className='text-sm leading-relaxed text-term-dim'>
+                          {summary}
+                        </p>
+                        <span className='inline-block font-mono text-xs text-term-green opacity-0 transition-opacity group-hover:opacity-100'>
+                          read more →
+                        </span>
                       </div>
                     </div>
-                    <div className='prose max-w-none text-gray-500 dark:text-gray-400'>
-                      {summary}
-                    </div>
-                  </div>
-                </article>
+                  </Link>
+                </Reveal>
               </li>
             );
           })}
