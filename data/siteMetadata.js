@@ -11,12 +11,12 @@ const siteMetadata = {
   siteLogo: '/static/images/logo.png',
   image: '/static/avatar.jpg',
   socialBanner: '/static/banner.png',
-  email: 'vijaykrajendran69@gmail.com',
+  email: 'vijaykrajendran@gmail.com',
   github: 'https://github.com/vijayvj6796',
   twitter: 'https://twitter.com/vijayrajendran_',
-  facebook: 'https://facebook.com',
-  youtube: 'https://youtube.com',
-  linkedin: 'https://www.linkedin.com',
+  facebook: '',
+  youtube: '',
+  linkedin: 'https://www.linkedin.com/in/vijaykumar96',
   locale: 'en-US',
   analytics: {
     // If you want to use an analytics provider you have to add it to the
