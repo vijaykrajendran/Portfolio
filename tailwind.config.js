@@ -26,29 +26,30 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['Fira Code', ...defaultTheme.fontFamily.mono],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
         mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
-        body: ['Open Sans', ...defaultTheme.fontFamily.sans],
+        body: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: colors.emerald,
-        gray: colors.neutral,
+        primary: colors.amber,
+        gray: colors.slate,
         'placeholder-light': '#F0F0F0',
         'placeholder-dark': '#252525',
-        // Terminal / DevOps palette
+        // Theme-aware tokens (driven by CSS variables in global.css)
         term: {
-          bg: '#0d1117', // GitHub-dark-like base
-          panel: '#161b22', // window body
-          titlebar: '#21262d', // window chrome
-          border: '#30363d',
-          text: '#c9d1d9',
-          dim: '#8b949e',
-          green: '#3fb950',
-          cyan: '#39c5cf',
-          blue: '#58a6ff',
-          amber: '#d29922',
-          red: '#f85149',
-          purple: '#bc8cff',
+          bg: 'var(--term-bg)',
+          panel: 'var(--term-panel)',
+          titlebar: 'var(--term-titlebar)',
+          border: 'var(--term-border)',
+          text: 'var(--term-text)',
+          dim: 'var(--term-dim)',
+          green: 'var(--term-gold)', // primary accent (gold)
+          emerald: 'var(--term-gold-light)',
+          cyan: 'var(--term-indigo-soft)',
+          blue: 'var(--term-indigo)',
+          amber: 'var(--term-gold)',
+          red: 'var(--term-gold)',
+          purple: 'var(--term-indigo-soft)',
         },
       },
       typography: theme => ({

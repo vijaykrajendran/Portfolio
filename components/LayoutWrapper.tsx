@@ -1,5 +1,7 @@
 import headerNavLinks from '@/data/headerNavLinks';
-import siteMetadata from '@/data/siteMetadata';
+import Spotlight from '@/components/motion/Spotlight';
+import ScrollProgress from '@/components/motion/ScrollProgress';
+import IntroSplash from '@/components/motion/IntroSplash';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import Footer from './Footer';
@@ -19,61 +21,42 @@ const LayoutWrapper = ({ children }: Props) => {
     href === '/' ? router.pathname === '/' : router.pathname.startsWith(href);
 
   return (
-    <SectionContainer>
-      <div className='flex min-h-dvh flex-col justify-between py-4 sm:py-6'>
-        <div className='terminal-window'>
-          {/* Title bar */}
-          <div className='terminal-titlebar'>
-            <span className='terminal-dot red' />
-            <span className='terminal-dot amber' />
-            <span className='terminal-dot green' />
-            <span className='terminal-title truncate'>
-              vijay@portfolio: ~{router.pathname === '/' ? '' : router.pathname}
-            </span>
-            <div className='ml-auto flex items-center'>
-              <ThemeSwitch />
-              <MobileNav />
+    <>
+      <IntroSplash />
+      <ScrollProgress />
+      <Spotlight />
+      <SectionContainer>
+        <div className='flex min-h-dvh flex-col justify-between'>
+          <header className='sticky top-0 z-20 -mx-4 mb-4 border-b border-term-border/60 bg-term-bg/70 px-4 py-4 backdrop-blur-md sm:-mx-6 sm:px-6'>
+            <div className='flex items-center justify-between'>
+              <Link
+                href='/'
+                className='font-mono text-sm font-bold text-term-text'
+              >
+                <span className='text-term-green'>~/</span>vijay
+              </Link>
+              <div className='flex items-center'>
+                <nav className='hidden items-center gap-6 text-sm font-medium sm:flex'>
+                  {headerNavLinks.map(link => (
+                    <Link
+                      key={link.title}
+                      href={link.href}
+                      className={`nav-link ${isActive(link.href) ? 'active' : ''}`}
+                    >
+                      {link.title}
+                    </Link>
+                  ))}
+                </nav>
+                <ThemeSwitch />
+                <MobileNav />
+              </div>
             </div>
-          </div>
-
-          {/* Command-line nav (desktop) */}
-          <nav className='hidden border-b border-term-border bg-term-bg px-4 py-2 text-xs sm:block'>
-            <span className='term-comment'># nav:</span>{' '}
-            {headerNavLinks.map((link, i) => (
-              <span key={link.title}>
-                <Link
-                  href={link.href}
-                  className={`term-navlink font-mono ${
-                    isActive(link.href) ? 'active font-bold' : ''
-                  }`}
-                >
-                  {link.title.toLowerCase().replace(/\s+/g, '-')}
-                </Link>
-                {i < headerNavLinks.length - 1 && (
-                  <span className='text-term-border'> · </span>
-                )}
-              </span>
-            ))}
-          </nav>
-
-          {/* Terminal body / page content */}
-          <main className='terminal-body min-h-[60vh]'>
-            <p className='mb-4 hidden text-xs text-term-dim sm:block'>
-              <span className='term-prompt-user'>vijay@portfolio</span>
-              <span className='text-term-text'>:</span>
-              <span className='term-prompt-path'>~</span>
-              <span className='text-term-text'>$ </span>
-              cat{' '}
-              {router.pathname === '/'
-                ? 'welcome.md'
-                : `${router.pathname.slice(1).replace(/\//g, '_')}.md`}
-            </p>
-            {children}
-          </main>
+          </header>
+          <main className='relative z-10 mb-auto'>{children}</main>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </SectionContainer>
+      </SectionContainer>
+    </>
   );
 };
 

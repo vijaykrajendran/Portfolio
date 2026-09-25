@@ -5,19 +5,13 @@ function Footer(): React.ReactElement {
   const year: number = new Date().getFullYear();
 
   return (
-    <div className='mt-6 flex flex-col items-center py-6 font-mono text-term-dim'>
+    <div className='mt-16 flex flex-col items-center border-t border-term-border/60 py-8 text-term-dim'>
       <SocialIcons />
-      <span className='mt-4 text-xs'>
-        <span className='term-prompt-user'>vijay@portfolio</span>
-        <span>:</span>
-        <span className='term-prompt-path'>~</span>
-        <span>$ echo </span>
-        <span className='text-term-text'>
-          &quot;&copy; {year} Vijay Rajendran&quot;
-        </span>
+      <span className='mt-4 text-sm'>
+        &copy; {year} <span className='text-term-text'>Vijay Rajendran</span>
       </span>
-      <span className='mt-1 text-[0.7rem] text-term-border'>
-        built with next.js · deployed on vercel
+      <span className='mt-1 font-mono text-xs text-term-border'>
+        built with Next.js &amp; Tailwind · deployed on Vercel
       </span>
     </div>
   );

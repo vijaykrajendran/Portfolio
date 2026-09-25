@@ -1,47 +1,76 @@
+import Reveal from '@/components/motion/Reveal';
+import LottiePlayer from '@/components/motion/LottiePlayer';
+import { motion } from 'framer-motion';
 import { memo } from 'react';
-import { useInView } from 'react-intersection-observer';
 
-const techStack: string[] = [
-  'kubernetes',
-  'docker',
-  'aws',
-  'terraform',
-  'jenkins',
-  'github-actions',
-  'prometheus',
-  'grafana',
-  'argocd',
-  'helm',
-  'linux',
-  'python',
+interface TechItem {
+  name: string;
+  icon: string;
+}
+
+const techStack: TechItem[] = [
+  { name: 'Kubernetes', icon: '☸️' },
+  { name: 'Docker', icon: '🐳' },
+  { name: 'AWS', icon: '☁️' },
+  { name: 'Terraform', icon: '🏗️' },
+  { name: 'Jenkins', icon: '🔧' },
+  { name: 'GitHub Actions', icon: '⚡' },
+  { name: 'Prometheus', icon: '📊' },
+  { name: 'Grafana', icon: '📈' },
+  { name: 'ArgoCD', icon: '🔄' },
+  { name: 'Helm', icon: '⛵' },
+  { name: 'Linux', icon: '🐧' },
+  { name: 'Python', icon: '🐍' },
 ];
 
 function TechStack(): React.ReactElement {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
-
   return (
-    <div ref={ref} className='mx-auto mt-8 max-w-2xl font-mono text-sm'>
-      <p className='text-term-dim'>
-        <span className='term-prompt-user'>vijay@portfolio</span>
-        <span>:</span>
-        <span className='term-prompt-path'>~</span>
-        <span>$ </span>
-        <span className='text-term-cyan'>kubectl</span> get stack
-      </p>
-      <div className='mt-3 flex flex-wrap gap-2'>
-        {techStack.map((tech, index) => (
-          <span
-            key={tech}
-            className={`term-chip px-2.5 py-1 text-xs transition-all duration-300 ${
-              inView ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
-            }`}
-            style={{ transitionDelay: inView ? `${index * 40}ms` : '0ms' }}
+    <section className='mx-auto mt-20 max-w-3xl px-2 text-center'>
+      <Reveal>
+        <div className='mb-2 flex justify-center'>
+          <LottiePlayer
+            src='/static/lottie/coding.json'
+            sizeClass='h-32 w-32 sm:h-40 sm:w-40'
+          />
+        </div>
+        <h2 className='text-2xl font-bold text-term-text sm:text-3xl'>
+          Tech I work with
+        </h2>
+        <p className='mt-2 text-sm text-term-dim'>
+          The cloud-native toolkit I use to ship and scale.
+        </p>
+      </Reveal>
+
+      <motion.div
+        className='mt-8 flex flex-wrap justify-center gap-3'
+        initial='hidden'
+        whileInView='show'
+        viewport={{ once: true, amount: 0.2 }}
+        variants={{
+          hidden: {},
+          show: { transition: { staggerChildren: 0.05 } },
+        }}
+      >
+        {techStack.map(tech => (
+          <motion.span
+            key={tech.name}
+            className='motion-chip flex cursor-default items-center gap-2 px-4 py-2 text-sm font-medium'
+            variants={{
+              hidden: { opacity: 0, y: 16, scale: 0.9 },
+              show: {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+              },
+            }}
           >
-            <span className='text-term-green'>●</span> {tech}
-          </span>
+            <span>{tech.icon}</span>
+            {tech.name}
+          </motion.span>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </section>
   );
 }
 

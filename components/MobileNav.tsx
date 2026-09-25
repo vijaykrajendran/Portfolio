@@ -28,14 +28,12 @@ const MobileNav = () => {
     <div className='sm:hidden'>
       <button
         type='button'
-        className='ml-1 flex h-8 w-8 items-center justify-center rounded text-term-green'
+        className='ml-2 flex h-9 w-9 items-center justify-center rounded-md border border-term-border text-term-text hover:border-term-green hover:text-term-green'
         aria-label='Toggle menu'
         aria-expanded={navShow}
         onClick={onToggleNav}
       >
-        <span className='font-mono text-lg leading-none'>
-          {navShow ? '✕' : '≡'}
-        </span>
+        <span className='text-lg leading-none'>{navShow ? '✕' : '☰'}</span>
       </button>
 
       <div
@@ -46,27 +44,28 @@ const MobileNav = () => {
         aria-modal='true'
         aria-hidden={!navShow}
       >
-        <div className='flex items-center justify-between border-b border-term-border px-6 py-4'>
-          <span className='font-mono text-xs text-term-dim'>~/nav $ ls</span>
+        <div className='flex items-center justify-between border-b border-term-border px-6 py-5'>
+          <span className='font-mono text-sm font-bold text-term-text'>
+            <span className='text-term-green'>~/</span>vijay
+          </span>
           <button
             type='button'
             aria-label='Close menu'
-            className='font-mono text-lg text-term-red'
+            className='text-2xl text-term-dim hover:text-term-green'
             onClick={onToggleNav}
           >
             ✕
           </button>
         </div>
-        <nav className='mt-4 px-6'>
+        <nav className='mt-6 px-6'>
           {headerNavLinks.map(link => (
             <div key={link.title} className='py-3'>
               <Link
                 href={link.href}
-                className='font-mono text-lg text-term-text'
+                className='text-xl font-semibold text-term-text hover:text-term-green'
                 onClick={onToggleNav}
               >
-                <span className='text-term-green'>▸</span>{' '}
-                {link.title.toLowerCase().replace(/\s+/g, '-')}
+                {link.title}
               </Link>
             </div>
           ))}

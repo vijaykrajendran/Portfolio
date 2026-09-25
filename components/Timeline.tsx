@@ -1,5 +1,7 @@
+import Reveal from '@/components/motion/Reveal';
+import LottiePlayer from '@/components/motion/LottiePlayer';
+import { motion } from 'framer-motion';
 import { memo } from 'react';
-import { useInView } from 'react-intersection-observer';
 
 interface TimelineItem {
   year: string;
@@ -7,6 +9,7 @@ interface TimelineItem {
   company: string;
   description: string;
   type: 'work' | 'education';
+  tags: string[];
 }
 
 const timelineData: TimelineItem[] = [
@@ -17,6 +20,7 @@ const timelineData: TimelineItem[] = [
     description:
       'Leading cloud infrastructure, Kubernetes deployments, and CI/CD pipelines for aviation technology.',
     type: 'work',
+    tags: ['Kubernetes', 'AWS', 'CI/CD', 'Terraform'],
   },
   {
     year: '2023',
@@ -25,14 +29,16 @@ const timelineData: TimelineItem[] = [
     description:
       'Security enhancements, CI/CD improvements, and migrated Node.js apps from Heroku to AWS.',
     type: 'work',
+    tags: ['AWS', 'Node.js', 'Security', 'CI/CD'],
   },
   {
     year: '2022',
     title: 'MSc DevOps',
     company: 'Atlantic Technological University',
     description:
-      'Master of Science in DevOps with focus on cloud-native technologies and automation.',
+      'Master of Science in DevOps with a focus on cloud-native technologies and automation.',
     type: 'education',
+    tags: ['Cloud-Native', 'Automation'],
   },
   {
     year: '2021',
@@ -41,56 +47,82 @@ const timelineData: TimelineItem[] = [
     description:
       'Open-source solutions, data migrations (P2V, V2V, V2P, V2C), and cost optimization.',
     type: 'work',
+    tags: ['Linux', 'Migrations', 'Open Source'],
   },
 ];
 
-function shortHash(index: number): string {
-  // deterministic pseudo hash for a git-log look
-  return ['a1f3c9d', '7e2b04a', 'c58d1f2', '9b3e7a6'][index] || '0000000';
-}
-
-function TimelineEntry({ item, index }: { item: TimelineItem; index: number }) {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
-
+function TimelineEntry({
+  item,
+  index,
+}: {
+  item: TimelineItem;
+  index: number;
+}): React.ReactElement {
   return (
-    <div
-      ref={ref}
-      className={`relative pl-6 transition-all duration-500 ${
-        inView ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
-      }`}
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
-      {/* commit dot on the line */}
-      <span className='absolute left-[-5px] top-1.5 h-2.5 w-2.5 rounded-full border border-term-bg bg-term-green' />
-
-      <p className='text-xs'>
-        <span className='text-term-amber'>commit {shortHash(index)}</span>{' '}
-        <span className='text-term-dim'>
-          ({item.type === 'education' ? 'edu' : 'work'})
-        </span>
-      </p>
-      <p className='text-sm font-bold text-term-text'>
-        {item.title} <span className='text-term-cyan'>@ {item.company}</span>
-      </p>
-      <p className='text-xs text-term-dim'>Date: {item.year}</p>
-      <p className='mt-1 mb-4 text-xs leading-6 text-term-text'>
-        {item.description}
-      </p>
+    <div className='relative pl-10 pb-10'>
+      {/* Animated dot */}
+      <motion.span
+        className='absolute left-[11px] top-1.5 z-10 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-term-bg bg-term-green'
+        initial={{ scale: 0 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true, amount: 0.6 }}
+        transition={{ duration: 0.4, delay: index * 0.08 }}
+        style={{ boxShadow: '0 0 12px rgba(45,212,191,0.7)' }}
+      />
+      <Reveal direction='right' delay={index * 0.08}>
+        <div className='motion-card p-5'>
+          <div className='mb-2 flex flex-wrap items-center gap-x-3 gap-y-1'>
+            <span className='rounded-full bg-term-green/15 px-2.5 py-0.5 font-mono text-xs font-semibold text-term-green'>
+              {item.year}
+            </span>
+            <span className='text-xs uppercase tracking-wide text-term-dim'>
+              {item.type}
+            </span>
+          </div>
+          <h3 className='text-lg font-bold text-term-text'>
+            {item.title}{' '}
+            <span className='text-term-green'>· {item.company}</span>
+          </h3>
+          <p className='mt-1 text-sm leading-relaxed text-term-dim'>
+            {item.description}
+          </p>
+          <div className='mt-3 flex flex-wrap gap-2'>
+            {item.tags.map(tag => (
+              <span
+                key={tag}
+                className='rounded-md border border-term-border bg-term-panel px-2 py-0.5 font-mono text-[0.7rem] text-term-dim'
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </Reveal>
     </div>
   );
 }
 
 function Timeline(): React.ReactElement {
   return (
-    <section className='mx-auto mt-10 max-w-2xl font-mono'>
-      <p className='text-sm text-term-dim'>
-        <span className='term-prompt-user'>vijay@portfolio</span>
-        <span>:</span>
-        <span className='term-prompt-path'>~</span>
-        <span>$ </span>
-        <span className='text-term-cyan'>git</span> log --oneline --career
-      </p>
-      <div className='relative mt-4 border-l border-term-border pl-2'>
+    <section className='mx-auto mt-20 max-w-3xl px-2'>
+      <Reveal className='mb-10 text-center'>
+        <div className='mb-2 flex justify-center'>
+          <LottiePlayer
+            src='/static/lottie/server-data.json'
+            sizeClass='h-28 w-28 sm:h-36 sm:w-36'
+          />
+        </div>
+        <h2 className='text-2xl font-bold text-term-text sm:text-3xl'>
+          My Journey
+        </h2>
+        <p className='mt-2 text-sm text-term-dim'>
+          Career highlights and milestones.
+        </p>
+      </Reveal>
+
+      <div className='relative'>
+        {/* Vertical line */}
+        <div className='absolute left-[11px] top-0 h-full w-0.5 bg-gradient-to-b from-term-green via-term-cyan to-term-purple opacity-40' />
         {timelineData.map((item, index) => (
           <TimelineEntry key={index} item={item} index={index} />
         ))}

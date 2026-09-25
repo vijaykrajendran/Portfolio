@@ -1,5 +1,6 @@
 import { Header } from '@/components/Form';
 import { PageSEO } from '@/components/SEO';
+import LottiePlayer from '@/components/motion/LottiePlayer';
 import siteMetadata from '@/data/siteMetadata';
 import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import { contact } from 'config/contact';
@@ -33,6 +34,12 @@ function Contact(): React.ReactElement {
       <div className='fade-in divide-y-2 divide-gray-100 dark:divide-gray-800'>
         <Header title='Contact' />
         <div className='container py-12'>
+          <div className='mb-6 flex justify-center'>
+            <LottiePlayer
+              src='/static/lottie/rocket.json'
+              sizeClass='h-40 w-40 sm:h-52 sm:w-52'
+            />
+          </div>
           <p>
             Do you have a project in mind? Want to hire me? or simply wanna
             chat? Feel free to

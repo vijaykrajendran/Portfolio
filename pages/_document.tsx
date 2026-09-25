@@ -23,11 +23,11 @@ class MyDocument extends Document {
             href='/static/favicons/favicon-16x16.png'
           />
           <link rel='manifest' href='/static/favicons/site.webmanifest' />
-          <meta name='msapplication-TileColor' content='#0d1117' />
-          <meta name='theme-color' content='#0d1117' />
+          <meta name='msapplication-TileColor' content='#0a0a0f' />
+          <meta name='theme-color' content='#0a0a0f' />
           <link rel='alternate' type='application/rss+xml' href='/feed.xml' />
         </Head>
-        <body className='term-grid-bg bg-term-bg text-term-text antialiased'>
+        <body className='bg-term-bg font-sans text-term-text antialiased'>
           <Main />
           <NextScript />
         </body>
