@@ -1,4 +1,4 @@
-import { useState, useRef, ReactNode } from 'react';
+import { useState, useRef, ReactNode, isValidElement } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -8,6 +8,14 @@ const Pre = ({ children }: Props) => {
   const textInput = useRef(null);
   const [hovered, setHovered] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Extract the language from the child <code className="language-xxx">
+  let language = '';
+  if (isValidElement(children)) {
+    const className: string = (children.props as any)?.className || '';
+    const match = /language-(\w+)/.exec(className);
+    if (match) language = match[1];
+  }
 
   const onEnter = () => {
     setHovered(true);
@@ -31,14 +39,19 @@ const Pre = ({ children }: Props) => {
       onMouseLeave={onExit}
       className='relative'
     >
+      {language && (
+        <span className='absolute right-12 top-0 z-10 rounded-b px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-wider text-term-dim'>
+          {language}
+        </span>
+      )}
       {hovered && (
         <button
           aria-label='Copy code'
           type='button'
-          className={`absolute right-2 top-2 h-8 w-8 rounded border-2 bg-gray-700 p-1 dark:bg-gray-800 ${
+          className={`absolute right-2 top-2 h-8 w-8 rounded border bg-term-bg/80 p-1 backdrop-blur ${
             copied
-              ? 'border-green-400 focus:border-green-400 focus:outline-none'
-              : 'border-gray-300'
+              ? 'border-term-green focus:border-term-green focus:outline-none'
+              : 'border-term-border hover:border-term-green'
           }`}
           onClick={onCopy}
         >
@@ -47,7 +60,7 @@ const Pre = ({ children }: Props) => {
             viewBox='0 0 24 24'
             stroke='currentColor'
             fill='none'
-            className={copied ? 'text-green-400' : 'text-gray-300'}
+            className={copied ? 'text-term-green' : 'text-term-dim'}
           >
             {copied ? (
               <>
