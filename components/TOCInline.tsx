@@ -1,4 +1,3 @@
-import { Collapse } from '@geist-ui/core';
 import { Toc } from 'types/Toc';
 
 interface TOCInlineProps {
@@ -68,9 +67,10 @@ const TOCInline = ({
   return (
     <>
       {asDisclosure && renderTOC ? (
-        <Collapse className='!border-0 !pt-0' title={title}>
-          <div className='ml-4 !-mt-4'>{tocList}</div>
-        </Collapse>
+        <details className='toc-disclosure' open>
+          <summary className='cursor-pointer list-none'>{title}</summary>
+          <div className='ml-4 mt-2'>{tocList}</div>
+        </details>
       ) : (
         tocList
       )}

@@ -1,21 +1,38 @@
 /* eslint-disable react/display-name */
 import React, { useMemo } from 'react';
-import { ComponentMap, getMDXComponent } from 'mdx-bundler/client';
+import { getMDXComponent } from 'mdx-bundler/client';
 import Image from 'next/image';
 import CustomLink from './Link';
 import TOCInline from './TOCInline';
 import Pre from './Pre';
 import { BlogNewsletterForm } from './NewsletterForm';
 
+import AuthorLayout from '../layouts/AuthorLayout';
+import CourseLayout from '../layouts/CourseLayout';
+import ListLayout from '../layouts/ListLayout';
+import PostLayout from '../layouts/PostLayout';
+import PostSimple from '../layouts/PostSimple';
+
+const layouts: Record<string, React.ComponentType<any>> = {
+  AuthorLayout,
+  CourseLayout,
+  ListLayout,
+  PostLayout,
+  PostSimple,
+};
+
 const Wrapper: React.ComponentType<{ layout: string }> = ({
   layout,
   ...rest
 }) => {
-  const Layout = require(`../layouts/${layout}`).default;
+  const Layout = layouts[layout];
+  if (!Layout) {
+    throw new Error(`Unknown MDX layout: "${layout}"`);
+  }
   return <Layout {...rest} />;
 };
 
-export const MDXComponents: ComponentMap = {
+export const MDXComponents: Record<string, React.ComponentType<any>> = {
   Image,
   //@ts-ignore
   TOCInline,
