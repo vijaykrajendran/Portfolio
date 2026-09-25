@@ -1,26 +1,51 @@
 import Link from '@/components/Link';
+import LottiePlayer from '@/components/motion/LottiePlayer';
 
-export default function FourZeroFour() {
+export default function FourZeroFour(): React.ReactElement {
   return (
-    <div className='fade-in flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6'>
-      <div className='space-x-2 pt-6 pb-8 md:space-y-5'>
-        <h1 className='text-6xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 md:border-r-2 md:px-6 md:text-8xl md:leading-14'>
-          404
-        </h1>
+    <section className='fade-in mx-auto flex min-h-[70vh] max-w-2xl flex-col items-center justify-center px-4 text-center'>
+      {/* Lost astronaut, drifting in space */}
+      <div className='mb-2'>
+        <LottiePlayer
+          src='/static/lottie/astronaut.json'
+          sizeClass='h-44 w-44 sm:h-56 sm:w-56'
+        />
       </div>
-      <div className='max-w-md'>
-        <p className='mb-4 text-xl font-bold leading-normal md:text-2xl'>
-          Sorry we couldn't find this page.
-        </p>
-        <p className='mb-8'>
-          But dont worry, you can find plenty of other things on our homepage.
-        </p>
-        <Link href='/'>
-          <button className='focus:shadow-outline-blue inline rounded-lg border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium leading-5 text-white shadow transition-colors duration-150 hover:bg-blue-700 focus:outline-none dark:hover:bg-blue-500'>
-            Back to homepage
-          </button>
+
+      {/* Terminal-style error line */}
+      <p className='font-mono text-sm text-term-green sm:text-base'>
+        $ cd /page
+      </p>
+      <p className='mt-1 font-mono text-sm text-term-red sm:text-base'>
+        bash: cd: /page: No such file or directory
+      </p>
+
+      <h1 className='mt-6 text-6xl font-extrabold tracking-tight sm:text-8xl'>
+        <span className='gradient-text'>404</span>
+      </h1>
+
+      <p className='mt-4 text-lg font-semibold text-term-text sm:text-xl'>
+        Houston, we&apos;ve lost this page.
+      </p>
+      <p className='mt-2 max-w-md text-sm text-term-dim sm:text-base'>
+        The route drifted off into deep space. Let&apos;s get you back to
+        mission control.
+      </p>
+
+      <div className='mt-8 flex flex-wrap items-center justify-center gap-4'>
+        <Link
+          href='/'
+          className='btn-solid inline-block px-6 py-2.5 text-sm font-semibold'
+        >
+          🏠 Back to homepage
+        </Link>
+        <Link
+          href='/projects'
+          className='btn-glow inline-block px-6 py-2.5 text-sm font-semibold'
+        >
+          View my work
         </Link>
       </div>
-    </div>
+    </section>
   );
 }

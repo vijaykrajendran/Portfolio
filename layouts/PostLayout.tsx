@@ -2,11 +2,13 @@ import Comments from '@/components/comments';
 import Link from '@/components/Link';
 import PageTitle from '@/components/PageTitle';
 import ScrollTopAndComment from '@/components/ScrollTopAndComment';
+import ImageZoom from '@/components/motion/ImageZoom';
 import SectionContainer from '@/components/SectionContainer';
 import { BlogSEO } from '@/components/SEO';
 import Share from '@/components/Share';
 import Tag from '@/components/Tag';
 import TOCInline from '@/components/TOCInline';
+import TOCSidebar from '@/components/TOCSidebar';
 import siteMetadata from '@/data/siteMetadata';
 import Image from 'next/image';
 import { ReactNode } from 'react';
@@ -56,14 +58,15 @@ export default function PostLayout({
     <SectionContainer>
       <BlogSEO url={url} authorDetails={authorDetails} {...frontMatter} />
       <ScrollTopAndComment />
+      <ImageZoom />
       <article className='fade-in'>
-        <div className='xl:divide-y xl:divide-gray-100 xl:dark:divide-gray-800'>
+        <div className='xl:divide-y xl:divide-term-border/60'>
           <header className='pt-6 xl:pb-6'>
             <div className='space-y-1 text-center'>
               <dl className='space-y-10'>
                 <div>
                   <dt className='sr-only'>Published on</dt>
-                  <dd className='text-base font-medium leading-6 text-gray-500 dark:text-gray-400'>
+                  <dd className='font-mono text-sm font-medium leading-6 text-term-green'>
                     <time dateTime={date}>
                       {new Date(date).toLocaleDateString(
                         siteMetadata.locale,
@@ -76,17 +79,21 @@ export default function PostLayout({
               <div>
                 <PageTitle>{title}</PageTitle>
               </div>
-              <p className='text-base leading-6 text-gray-500 dark:text-gray-400'>
-                {readingTime?.text}
-              </p>
-              <Share title={title} url={url} />
+              {readingTime?.text && (
+                <p className='inline-flex items-center gap-1.5 rounded-full border border-term-border/60 px-3 py-1 text-sm text-term-dim'>
+                  ☕ {readingTime.text}
+                </p>
+              )}
+              <div className='pt-2'>
+                <Share title={title} url={url} />
+              </div>
             </div>
           </header>
           <div
-            className='divide-y divide-gray-100 pb-8 dark:divide-gray-800 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0'
+            className='divide-y divide-term-border/40 pb-8 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0'
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <dl className='pt-6 pb-10 xl:sticky xl:top-0 xl:border-b xl:border-gray-100 xl:pt-11 xl:dark:border-gray-800'>
+            <dl className='pt-6 pb-10 xl:sticky xl:top-24 xl:self-start xl:pt-11'>
               <dt className='sr-only'>Authors</dt>
               <dd>
                 <ul className='flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8'>
@@ -98,23 +105,21 @@ export default function PostLayout({
                       {author.avatar && (
                         <Image
                           src={author.avatar}
-                          width='38px'
-                          height='38px'
+                          width={38}
+                          height={38}
                           alt='avatar'
                           className='h-10 w-10 rounded-full'
                         />
                       )}
                       <dl className='whitespace-nowrap text-sm font-medium leading-5'>
                         <dt className='sr-only'>Name</dt>
-                        <dd className='text-gray-900 dark:text-gray-100'>
-                          {author.name}
-                        </dd>
+                        <dd className='text-term-text'>{author.name}</dd>
                         <dt className='sr-only'>Twitter</dt>
                         <dd>
                           {author.twitter && (
                             <Link
                               href={author.twitter}
-                              className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
+                              className='text-term-green hover:text-term-cyan'
                             >
                               {author.twitter.replace(
                                 'https://twitter.com/',
@@ -128,8 +133,13 @@ export default function PostLayout({
                   ))}
                 </ul>
               </dd>
+              {toc && (
+                <div className='mt-10'>
+                  <TOCSidebar toc={toc} />
+                </div>
+              )}
             </dl>
-            <div className='divide-y-2 divide-gray-100 dark:divide-gray-800 xl:col-span-3 xl:row-span-2 xl:pb-0'>
+            <div className='divide-y-2 divide-term-border/40 xl:col-span-3 xl:row-span-2 xl:pb-0'>
               {banner && (
                 <img
                   src={banner}
@@ -141,24 +151,33 @@ export default function PostLayout({
                 <TOCInline toc={toc} asDisclosure />
                 {children}
               </div>
-              <div className='pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300'>
-                <Link href={discussUrl(slug)} rel='nofollow'>
+              <div className='pt-6 pb-6 text-sm text-term-dim'>
+                <Link
+                  href={discussUrl(slug)}
+                  rel='nofollow'
+                  className='text-term-green hover:text-term-cyan'
+                >
                   {'Discuss on Twitter'}
                 </Link>
                 {` • `}
-                <Link href={editUrl(fileName)}>{'View on GitHub'}</Link>
+                <Link
+                  href={editUrl(fileName)}
+                  className='text-term-green hover:text-term-cyan'
+                >
+                  {'View on GitHub'}
+                </Link>
               </div>
               <Comments frontMatter={frontMatter} />
             </div>
             <footer>
               <div className='xl:sticky xl:top-32'>
-                <div className='divide-gray-100 text-sm font-medium leading-5 dark:divide-gray-800 xl:col-start-1 xl:row-start-2 xl:divide-y'>
+                <div className='text-sm font-medium leading-5 xl:col-start-1 xl:row-start-2 xl:divide-y xl:divide-term-border/40'>
                   {tags && (
                     <div className='py-4 xl:py-8'>
-                      <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
+                      <h2 className='font-mono text-xs uppercase tracking-wide text-term-dim'>
                         Tags
                       </h2>
-                      <div className='flex flex-wrap'>
+                      <div className='mt-2 flex flex-wrap'>
                         {tags.map(tag => (
                           <Tag key={tag} text={tag} />
                         ))}
@@ -169,10 +188,10 @@ export default function PostLayout({
                     <div className='flex justify-between py-4 xl:block xl:space-y-8 xl:py-8'>
                       {prev && (
                         <div>
-                          <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
+                          <h2 className='font-mono text-xs uppercase tracking-wide text-term-dim'>
                             Previous Article
                           </h2>
-                          <div className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'>
+                          <div className='text-term-green hover:text-term-cyan'>
                             <Link href={`/blog/${prev.slug}`}>
                               {prev.title}
                             </Link>
@@ -181,10 +200,10 @@ export default function PostLayout({
                       )}
                       {next && (
                         <div>
-                          <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
+                          <h2 className='font-mono text-xs uppercase tracking-wide text-term-dim'>
                             Next Article
                           </h2>
-                          <div className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'>
+                          <div className='text-term-green hover:text-term-cyan'>
                             <Link href={`/blog/${next.slug}`}>
                               {next.title}
                             </Link>
@@ -197,7 +216,7 @@ export default function PostLayout({
                 <div className='pt-4 xl:pt-8'>
                   <Link
                     href='/blog'
-                    className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
+                    className='font-mono text-term-green hover:text-term-cyan'
                   >
                     &larr; Back to the blog
                   </Link>

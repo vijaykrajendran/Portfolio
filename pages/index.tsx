@@ -2,15 +2,14 @@ import { PageSEO } from '@/components/SEO';
 import siteMetadata from '@/data/siteMetadata';
 import { getFileBySlug } from '@/lib/mdx';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import dynamic from 'next/dynamic';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
-import KubeAstronautBadge from '@/components/KubeAstronautBadge';
+import KubeAstronautHero from '@/components/KubeAstronautHero';
+import Banner from '@/components/Banner';
+import Stats from '@/components/Stats';
 import TechStack from '@/components/TechStack';
+import Marquee from '@/components/Marquee';
 import Timeline from '@/components/Timeline';
 import { kubeAstronautStatus } from 'config/certifications';
-
-// TODO: Direct share functionality.
-// TODO: Switch geist-ui with something simple.
 
 // @ts-ignore
 export const getStaticProps: GetStaticProps<{
@@ -25,8 +24,6 @@ export const getStaticProps: GetStaticProps<{
   return { props: { author } };
 };
 
-const Banner = dynamic(import('@/components/Banner'));
-
 export default function Home({
   author,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -37,19 +34,31 @@ export default function Home({
         description={siteMetadata.description}
       />
       <Banner frontMatter={author} />
-      
-      {/* KubeAstronaut Badge */}
-      {kubeAstronautStatus.isKubeAstronaut && (
-        <div className="mx-auto max-w-md px-4 py-4 sm:py-6">
-          <KubeAstronautBadge
+
+      {/* Featured KubeAstronaut achievement */}
+      <div id='explore' className='scroll-mt-24'>
+        {kubeAstronautStatus.isKubeAstronaut && (
+          <KubeAstronautHero
             badge={kubeAstronautStatus.badge}
-            certificationCount={kubeAstronautStatus.certifications.length}
+            credentialUrl={kubeAstronautStatus.credentialUrl}
+            awardDate={kubeAstronautStatus.awardDate}
+            certifications={kubeAstronautStatus.certifications}
           />
-        </div>
-      )}
+        )}
+      </div>
+
+      <div className='section-divider mx-auto mt-16 max-w-4xl' />
+
+      {/* Animated stats */}
+      <Stats />
 
       {/* Tech Stack Showcase */}
       <TechStack />
+
+      {/* Infinite tech ticker */}
+      <Marquee />
+
+      <div className='section-divider mx-auto mt-20 max-w-4xl' />
 
       {/* Experience Timeline */}
       <Timeline />

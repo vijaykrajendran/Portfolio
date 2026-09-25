@@ -5,7 +5,7 @@ avatar: /static/avatar.jpg
 occupation: Sr. DevOps Engineer
 company: SITA
 resume: /static/Vijay_Resume.pdf
-email: vijayvj6796@gmail.com
+email: vijaykrajendran@gmail.com
 twitter: https://twitter.com/vijayrajendran_
 linkedin: https://www.linkedin.com/in/vijaykumar96
 github: https://github.com/vijayvj6796
@@ -15,9 +15,9 @@ github: https://github.com/vijayvj6796
 
 Currently, I am working as a **Sr. DevOps Engineer** at **SITA**.
 
-👨‍💻 Previously, I served as a DevOps Engineer at [Bidgely Technologies](https://www.bidgely.com/)  where I helped in security enhancements and CI/CD improvements that accelerated application deployment and system resilience. I was instrumental in migrating Node.js applications from Heroku to AWS, optimizing performance and scalability.
+👨‍💻 Previously, I served as a DevOps Engineer at [Bidgely Technologies](https://www.bidgely.com/) where I helped in security enhancements and CI/CD improvements that accelerated application deployment and system resilience. I was instrumental in migrating Node.js applications from Heroku to AWS, optimizing performance and scalability.
 
-📚 Before that, I was a Linux Administrator and Junior DevOps Engineer at [Optit Technologies](https://optit.in/), focusing on cost-effective solutions through the adoption of open-source technologies and significant data migrations like  P2V, V2V, V2P & V2C. Also,I contributed in providing cost-optimized solutions using open-source solution and Migrating P2V, V2V, V2P & V2C.
+📚 Before that, I was a Linux Administrator and Junior DevOps Engineer at [Optit Technologies](https://optit.in/), focusing on cost-effective solutions through the adoption of open-source technologies and significant data migrations like P2V, V2V, V2P & V2C. Also,I contributed in providing cost-optimized solutions using open-source solution and Migrating P2V, V2V, V2P & V2C.
 
 🖋️ Outside of work, I am an avid contributor to the tech community, having published numerous articles that advocate for innovative DevOps practices. My efforts have not only educated but also inspired many within the industry. I hold a Master of Science in DevOps from Atlantic Technological University, reflecting my deep commitment to continuous learning and professional development.
 

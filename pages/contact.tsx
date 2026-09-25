@@ -1,25 +1,28 @@
 import { Header } from '@/components/Form';
 import { PageSEO } from '@/components/SEO';
+import LottiePlayer from '@/components/motion/LottiePlayer';
 import siteMetadata from '@/data/siteMetadata';
 import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import { contact } from 'config/contact';
-import { openPopupWidget } from 'react-calendly';
+import { useEffect, useState } from 'react';
+import { PopupModal } from 'react-calendly';
 import { RoughNotation } from 'react-rough-notation';
 
 function Contact(): React.ReactElement {
   const [randomColor] = useRandomColorPair();
+  const [isOpen, setIsOpen] = useState(false);
+  const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setRootElement(document.body);
+  }, []);
 
   function onScheduleMeeting(): void {
     if (!contact.calendly) {
       console.error('err: calendly link was not provided.');
       return;
     }
-
-    const config = {
-      url: contact.calendly,
-    };
-
-    openPopupWidget(config);
+    setIsOpen(true);
   }
 
   return (
@@ -31,6 +34,12 @@ function Contact(): React.ReactElement {
       <div className='fade-in divide-y-2 divide-gray-100 dark:divide-gray-800'>
         <Header title='Contact' />
         <div className='container py-12'>
+          <div className='mb-6 flex justify-center'>
+            <LottiePlayer
+              src='/static/lottie/rocket.json'
+              sizeClass='h-40 w-40 sm:h-52 sm:w-52'
+            />
+          </div>
           <p>
             Do you have a project in mind? Want to hire me? or simply wanna
             chat? Feel free to
@@ -54,6 +63,14 @@ function Contact(): React.ReactElement {
           </p>
         </div>
       </div>
+      {contact.calendly && rootElement && (
+        <PopupModal
+          url={contact.calendly}
+          open={isOpen}
+          onModalClose={() => setIsOpen(false)}
+          rootElement={rootElement}
+        />
+      )}
     </>
   );
 }

@@ -4,3 +4,5 @@ node_modules/
 **/coverage/
 **/build/
 **/.webpack/
+.next/
+next-env.d.ts

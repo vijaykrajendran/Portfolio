@@ -6,9 +6,6 @@ const colors = require('tailwindcss/colors');
 
 /** @type {import("tailwindcss/tailwind-config").TailwindConfig } */
 module.exports = {
-  experimental: {
-    optimizeUniversalDefaults: true,
-  },
   content: [
     './pages/**/*.tsx',
     './components/**/*.tsx',
@@ -29,13 +26,31 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
+        body: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: colors.cyan,
-        gray: colors.neutral,
+        primary: colors.amber,
+        gray: colors.slate,
         'placeholder-light': '#F0F0F0',
         'placeholder-dark': '#252525',
+        // Theme-aware tokens (driven by CSS variables in global.css)
+        term: {
+          bg: 'var(--term-bg)',
+          panel: 'var(--term-panel)',
+          titlebar: 'var(--term-titlebar)',
+          border: 'var(--term-border)',
+          text: 'var(--term-text)',
+          dim: 'var(--term-dim)',
+          green: 'var(--term-gold)', // primary accent (gold)
+          emerald: 'var(--term-gold-light)',
+          cyan: 'var(--term-indigo-soft)',
+          blue: 'var(--term-indigo)',
+          amber: 'var(--term-gold)',
+          red: 'var(--term-gold)',
+          purple: 'var(--term-indigo-soft)',
+        },
       },
       typography: theme => ({
         DEFAULT: {
@@ -170,9 +185,5 @@ module.exports = {
       }),
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/line-clamp'),
-  ],
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };

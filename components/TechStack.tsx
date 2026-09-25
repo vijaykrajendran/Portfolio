@@ -1,60 +1,76 @@
+import Reveal from '@/components/motion/Reveal';
+import LottiePlayer from '@/components/motion/LottiePlayer';
+import { motion } from 'framer-motion';
 import { memo } from 'react';
-import { useInView } from 'react-intersection-observer';
 
 interface TechItem {
   name: string;
   icon: string;
-  color: string;
 }
 
 const techStack: TechItem[] = [
-  { name: 'Kubernetes', icon: '☸️', color: 'from-blue-500 to-blue-600' },
-  { name: 'Docker', icon: '🐳', color: 'from-cyan-500 to-blue-500' },
-  { name: 'AWS', icon: '☁️', color: 'from-orange-400 to-orange-500' },
-  { name: 'Terraform', icon: '🏗️', color: 'from-purple-500 to-purple-600' },
-  { name: 'Jenkins', icon: '🔧', color: 'from-red-500 to-red-600' },
-  { name: 'GitHub Actions', icon: '⚡', color: 'from-gray-600 to-gray-700' },
-  { name: 'Prometheus', icon: '📊', color: 'from-orange-500 to-red-500' },
-  { name: 'Grafana', icon: '📈', color: 'from-orange-400 to-yellow-500' },
-  { name: 'ArgoCD', icon: '🔄', color: 'from-orange-500 to-orange-600' },
-  { name: 'Helm', icon: '⛵', color: 'from-blue-400 to-blue-500' },
-  { name: 'Linux', icon: '🐧', color: 'from-yellow-500 to-yellow-600' },
-  { name: 'Python', icon: '🐍', color: 'from-green-500 to-blue-500' },
+  { name: 'Kubernetes', icon: '☸️' },
+  { name: 'Docker', icon: '🐳' },
+  { name: 'AWS', icon: '☁️' },
+  { name: 'Terraform', icon: '🏗️' },
+  { name: 'Jenkins', icon: '🔧' },
+  { name: 'GitHub Actions', icon: '⚡' },
+  { name: 'Prometheus', icon: '📊' },
+  { name: 'Grafana', icon: '📈' },
+  { name: 'ArgoCD', icon: '🔄' },
+  { name: 'Helm', icon: '⛵' },
+  { name: 'Linux', icon: '🐧' },
+  { name: 'Python', icon: '🐍' },
 ];
 
 function TechStack(): React.ReactElement {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
   return (
-    <div ref={ref} className="py-6 sm:py-8">
-      <h3 className="text-center text-sm font-medium text-gray-500 dark:text-gray-400 mb-4 sm:mb-6">
-        Technologies I work with
-      </h3>
-      <div className="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-2xl mx-auto px-4">
-        {techStack.map((tech, index) => (
-          <div
+    <section className='mx-auto mt-20 max-w-3xl px-2 text-center'>
+      <Reveal>
+        <div className='mb-2 flex justify-center'>
+          <LottiePlayer
+            src='/static/lottie/coding.json'
+            sizeClass='h-32 w-32 sm:h-40 sm:w-40'
+          />
+        </div>
+        <h2 className='text-2xl font-bold text-term-text sm:text-3xl'>
+          Tech I work with
+        </h2>
+        <p className='mt-2 text-sm text-term-dim'>
+          The cloud-native toolkit I use to ship and scale.
+        </p>
+      </Reveal>
+
+      <motion.div
+        className='mt-8 flex flex-wrap justify-center gap-3'
+        initial='hidden'
+        whileInView='show'
+        viewport={{ once: true, amount: 0.2 }}
+        variants={{
+          hidden: {},
+          show: { transition: { staggerChildren: 0.05 } },
+        }}
+      >
+        {techStack.map(tech => (
+          <motion.span
             key={tech.name}
-            className={`
-              group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 
-              rounded-full bg-gradient-to-r ${tech.color}
-              text-white text-xs sm:text-sm font-medium
-              transform transition-all duration-300
-              hover:scale-105 hover:shadow-lg
-              ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
-            `}
-            style={{
-              transitionDelay: inView ? `${index * 50}ms` : '0ms',
+            className='motion-chip flex cursor-default items-center gap-2 px-4 py-2 text-sm font-medium'
+            variants={{
+              hidden: { opacity: 0, y: 16, scale: 0.9 },
+              show: {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+              },
             }}
           >
-            <span className="text-sm sm:text-base">{tech.icon}</span>
-            <span>{tech.name}</span>
-          </div>
+            <span>{tech.icon}</span>
+            {tech.name}
+          </motion.span>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </section>
   );
 }
 
